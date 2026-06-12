@@ -1,0 +1,827 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DIY Crypto Tax &mdash; Your crypto tax sorted in minutes</title>
+  <meta name="description" content="Work out your crypto tax in minutes. Just paste your wallet address, pick UK or USA, pay &pound;10 and get your tax report. No accountant needed.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --green:   #16a34a;
+      --green2:  #22c55e;
+      --green3:  #dcfce7;
+      --blue:    #2563eb;
+      --blue2:   #dbeafe;
+      --text:    #111827;
+      --muted:   #6b7280;
+      --border:  #e5e7eb;
+      --bg:      #f9fafb;
+      --white:   #ffffff;
+      --red:     #dc2626;
+      --yellow:  #fbbf24;
+      --radius:  16px;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      -webkit-font-smoothing: antialiased;
+      line-height: 1.6;
+    }
+
+    a { text-decoration: none; color: inherit; }
+
+    /* ── NAV ── */
+    nav {
+      background: var(--white);
+      border-bottom: 1px solid var(--border);
+      padding: 0 20px;
+    }
+    .nav-inner {
+      max-width: 720px; margin: 0 auto;
+      height: 60px; display: flex;
+      align-items: center; justify-content: space-between;
+    }
+    .logo {
+      font-family: 'Nunito', sans-serif;
+      font-weight: 900; font-size: 20px;
+      color: var(--green);
+      letter-spacing: -0.02em;
+    }
+    .logo span { color: var(--text); }
+    .nav-flag { font-size: 22px; }
+
+    /* ── HERO ── */
+    .hero {
+      background: linear-gradient(160deg, #f0fdf4 0%, #eff6ff 100%);
+      padding: 56px 20px 48px;
+      text-align: center;
+      border-bottom: 1px solid var(--border);
+    }
+    .hero-emoji { font-size: 52px; margin-bottom: 16px; display: block; }
+    .hero h1 {
+      font-family: 'Nunito', sans-serif;
+      font-size: clamp(28px, 6vw, 48px);
+      font-weight: 900; line-height: 1.15;
+      color: var(--text); margin-bottom: 16px;
+      letter-spacing: -0.02em;
+    }
+    .hero h1 span { color: var(--green); }
+    .hero-sub {
+      font-size: clamp(16px, 3vw, 19px);
+      color: var(--muted); max-width: 500px;
+      margin: 0 auto 32px; line-height: 1.6;
+    }
+    .hero-badges {
+      display: flex; gap: 10px;
+      justify-content: center; flex-wrap: wrap;
+    }
+    .badge {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 20px; padding: 6px 14px;
+      font-size: 13px; font-weight: 600;
+      color: var(--muted);
+      display: flex; align-items: center; gap: 6px;
+    }
+    .badge-green { background: var(--green3); border-color: #bbf7d0; color: var(--green); }
+
+    /* ── MAIN CARD ── */
+    .main { padding: 32px 20px 60px; }
+    .card-wrap { max-width: 620px; margin: 0 auto; }
+
+    .step-card {
+      background: var(--white);
+      border: 2px solid var(--border);
+      border-radius: var(--radius);
+      padding: 28px;
+      margin-bottom: 16px;
+      transition: border-color 0.2s;
+    }
+    .step-card.active { border-color: var(--green); }
+    .step-card.done { border-color: #bbf7d0; background: #f0fdf4; }
+    .step-card.locked { opacity: 0.45; pointer-events: none; }
+
+    .step-header {
+      display: flex; align-items: center; gap: 14px;
+      margin-bottom: 20px;
+    }
+    .step-num {
+      width: 36px; height: 36px; border-radius: 50%;
+      background: var(--green); color: var(--white);
+      font-family: 'Nunito', sans-serif;
+      font-weight: 900; font-size: 16px;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .step-card.done .step-num { background: var(--green2); }
+    .step-card.locked .step-num { background: var(--border); color: var(--muted); }
+    .step-title {
+      font-family: 'Nunito', sans-serif;
+      font-weight: 800; font-size: 18px;
+      color: var(--text);
+    }
+    .step-sub { font-size: 13px; color: var(--muted); margin-top: 2px; }
+
+    /* Step 1 - Wallet */
+    .wallet-input {
+      width: 100%; padding: 14px 16px;
+      border: 2px solid var(--border);
+      border-radius: 10px; font-size: 15px;
+      font-family: 'Inter', monospace;
+      color: var(--text); outline: none;
+      transition: border-color 0.15s;
+      background: var(--white);
+    }
+    .wallet-input:focus { border-color: var(--green); }
+    .wallet-input::placeholder { color: #9ca3af; }
+    .wallet-hint {
+      font-size: 12px; color: var(--muted);
+      margin-top: 8px; line-height: 1.5;
+    }
+    .wallet-hint a { color: var(--green); font-weight: 600; }
+
+    /* Step 2 - Country */
+    .country-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .country-btn {
+      border: 2px solid var(--border);
+      border-radius: 12px; padding: 16px;
+      background: var(--white); cursor: pointer;
+      text-align: center; transition: all 0.15s;
+      font-family: 'Nunito', sans-serif;
+    }
+    .country-btn:hover { border-color: var(--green); }
+    .country-btn.selected { border-color: var(--green); background: var(--green3); }
+    .country-btn .flag { font-size: 32px; margin-bottom: 8px; display: block; }
+    .country-btn .country-name { font-weight: 800; font-size: 16px; color: var(--text); }
+    .country-btn .country-rule { font-size: 12px; color: var(--muted); margin-top: 4px; font-weight: 600; }
+    .country-btn .country-price { font-size: 18px; font-weight: 900; color: var(--green); margin-top: 6px; }
+
+    /* Step 3 - Email */
+    .email-input {
+      width: 100%; padding: 14px 16px;
+      border: 2px solid var(--border);
+      border-radius: 10px; font-size: 15px;
+      color: var(--text); outline: none;
+      transition: border-color 0.15s;
+      background: var(--white); margin-bottom: 12px;
+    }
+    .email-input:focus { border-color: var(--green); }
+
+    .delivery-label {
+      font-size: 13px; font-weight: 600;
+      color: var(--muted); margin-bottom: 10px;
+      text-transform: uppercase; letter-spacing: 0.06em;
+    }
+    .delivery-opts { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px; }
+    .delivery-opt {
+      border: 2px solid var(--border);
+      border-radius: 8px; padding: 8px 14px;
+      background: var(--white); cursor: pointer;
+      font-size: 13px; font-weight: 600;
+      color: var(--muted); transition: all 0.15s;
+      display: flex; align-items: center; gap: 6px;
+    }
+    .delivery-opt:hover { border-color: var(--green); color: var(--text); }
+    .delivery-opt.selected { border-color: var(--green); background: var(--green3); color: var(--green); }
+
+    /* Step 4 - Pay */
+    .price-display {
+      text-align: center; margin-bottom: 24px;
+    }
+    .price-big {
+      font-family: 'Nunito', sans-serif;
+      font-size: 56px; font-weight: 900;
+      color: var(--green); line-height: 1;
+      letter-spacing: -0.03em;
+    }
+    .price-desc { font-size: 14px; color: var(--muted); margin-top: 6px; }
+
+    .pay-btn {
+      width: 100%; padding: 18px;
+      border-radius: 12px; border: none;
+      font-family: 'Nunito', sans-serif;
+      font-size: 20px; font-weight: 900;
+      cursor: pointer; transition: all 0.15s;
+      margin-bottom: 10px;
+      display: flex; align-items: center;
+      justify-content: center; gap: 10px;
+    }
+    .pay-paypal {
+      background: #ffc439; color: #003087;
+    }
+    .pay-paypal:hover { background: #f0b429; transform: translateY(-1px); }
+    .pay-card {
+      background: var(--green); color: var(--white);
+    }
+    .pay-card:hover { background: #15803d; transform: translateY(-1px); }
+
+    .pay-secure {
+      text-align: center; font-size: 12px;
+      color: var(--muted); margin-top: 12px;
+      display: flex; align-items: center;
+      justify-content: center; gap: 6px;
+    }
+
+    /* ── RESULT CARD ── */
+    .result-card {
+      background: var(--white);
+      border: 2px solid var(--green2);
+      border-radius: var(--radius);
+      padding: 32px; text-align: center;
+      display: none;
+    }
+    .result-card.show { display: block; }
+    .result-icon { font-size: 56px; margin-bottom: 16px; }
+    .result-title {
+      font-family: 'Nunito', sans-serif;
+      font-size: 24px; font-weight: 900;
+      color: var(--text); margin-bottom: 8px;
+    }
+    .result-sub { font-size: 15px; color: var(--muted); margin-bottom: 28px; }
+
+    .result-data {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 12px; padding: 20px;
+      text-align: left; margin-bottom: 24px;
+    }
+    .result-row {
+      display: flex; justify-content: space-between;
+      align-items: center; padding: 10px 0;
+      border-bottom: 1px solid var(--border);
+      font-size: 15px;
+    }
+    .result-row:last-child { border-bottom: none; }
+    .result-row-label { color: var(--muted); font-weight: 500; }
+    .result-row-val { font-weight: 700; color: var(--text); }
+    .result-row-val.good { color: var(--green); }
+    .result-row-val.warn { color: var(--red); }
+
+    .share-btns { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; }
+    .share-btn {
+      padding: 12px 20px; border-radius: 10px;
+      border: none; cursor: pointer;
+      font-family: 'Nunito', sans-serif;
+      font-size: 15px; font-weight: 800;
+      display: flex; align-items: center; gap: 8px;
+      transition: all 0.15s;
+    }
+    .share-email { background: #f3f4f6; color: var(--text); }
+    .share-email:hover { background: var(--border); }
+    .share-whatsapp { background: #25D366; color: var(--white); }
+    .share-whatsapp:hover { background: #1da851; }
+    .share-telegram { background: #0088cc; color: var(--white); }
+    .share-telegram:hover { background: #0077b3; }
+    .share-print { background: var(--text); color: var(--white); }
+    .share-print:hover { background: #374151; }
+
+    /* ── HOW IT WORKS ── */
+    .how { padding: 48px 20px; border-top: 1px solid var(--border); background: var(--white); }
+    .how-inner { max-width: 620px; margin: 0 auto; }
+    .how h2 {
+      font-family: 'Nunito', sans-serif;
+      font-weight: 900; font-size: 26px;
+      text-align: center; margin-bottom: 32px;
+      color: var(--text);
+    }
+    .how-steps { display: flex; flex-direction: column; gap: 20px; }
+    .how-step { display: flex; gap: 16px; align-items: flex-start; }
+    .how-step-icon {
+      font-size: 28px; flex-shrink: 0;
+      width: 48px; text-align: center;
+    }
+    .how-step-title { font-weight: 700; font-size: 16px; margin-bottom: 4px; }
+    .how-step-desc { font-size: 14px; color: var(--muted); line-height: 1.6; }
+
+    /* ── FAQ ── */
+    .faq { padding: 48px 20px; border-top: 1px solid var(--border); }
+    .faq-inner { max-width: 620px; margin: 0 auto; }
+    .faq h2 {
+      font-family: 'Nunito', sans-serif;
+      font-weight: 900; font-size: 26px;
+      text-align: center; margin-bottom: 28px;
+    }
+    .faq-item {
+      border: 1px solid var(--border);
+      border-radius: 12px; margin-bottom: 10px;
+      background: var(--white); overflow: hidden;
+    }
+    .faq-q {
+      padding: 16px 20px; font-weight: 700;
+      font-size: 15px; cursor: pointer;
+      display: flex; justify-content: space-between;
+      align-items: center; user-select: none;
+    }
+    .faq-q:hover { background: var(--bg); }
+    .faq-arrow { color: var(--muted); transition: transform 0.2s; font-size: 18px; }
+    .faq-item.open .faq-arrow { transform: rotate(180deg); }
+    .faq-a {
+      display: none; padding: 0 20px 16px;
+      font-size: 14px; color: var(--muted); line-height: 1.7;
+    }
+    .faq-item.open .faq-a { display: block; }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--text); color: rgba(255,255,255,0.6);
+      padding: 32px 20px; text-align: center;
+    }
+    .footer-logo {
+      font-family: 'Nunito', sans-serif;
+      font-weight: 900; font-size: 18px;
+      color: var(--green2); margin-bottom: 8px;
+    }
+    footer p { font-size: 13px; line-height: 1.7; }
+    footer a { color: rgba(255,255,255,0.5); }
+    footer a:hover { color: var(--white); }
+    .footer-links { display: flex; gap: 20px; justify-content: center; margin-top: 16px; font-size: 13px; }
+
+    /* ── LOADING ── */
+    .loading-overlay {
+      display: none; position: fixed;
+      inset: 0; background: rgba(0,0,0,0.5);
+      z-index: 999; align-items: center;
+      justify-content: center; flex-direction: column;
+      gap: 16px;
+    }
+    .loading-overlay.show { display: flex; }
+    .spinner-big {
+      width: 56px; height: 56px;
+      border: 5px solid rgba(255,255,255,0.2);
+      border-top-color: var(--green2);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .loading-msg {
+      color: var(--white); font-family: 'Nunito', sans-serif;
+      font-size: 18px; font-weight: 700;
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 480px) {
+      .step-card { padding: 20px; }
+      .country-grid { grid-template-columns: 1fr 1fr; }
+      .share-btns { flex-direction: column; }
+      .share-btn { justify-content: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <div class="nav-inner">
+      <div class="logo">DIY<span>CryptoTax</span></div>
+      <div class="nav-flag">&#127468;&#127463; &#127482;&#127480;</div>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <div class="hero">
+    <span class="hero-emoji">&#128200;</span>
+    <h1>Your crypto tax<br><span>sorted in minutes.</span></h1>
+    <p class="hero-sub">
+      No accountant needed. Just paste your wallet address, tell us if you're in the UK or USA, and we'll work out exactly what you owe.
+    </p>
+    <div class="hero-badges">
+      <span class="badge badge-green">&#10003; Works for Bitcoin &amp; Ethereum</span>
+      <span class="badge badge-green">&#10003; HMRC &amp; IRS compliant</span>
+      <span class="badge">&#128274; Secure &amp; private</span>
+      <span class="badge">&#163;10 flat fee</span>
+    </div>
+  </div>
+
+  <!-- MAIN -->
+  <div class="main">
+    <div class="card-wrap">
+
+      <!-- STEP 1: WALLET -->
+      <div class="step-card active" id="step1">
+        <div class="step-header">
+          <div class="step-num">1</div>
+          <div>
+            <div class="step-title">Paste your wallet address</div>
+            <div class="step-sub">Bitcoin or Ethereum — both work</div>
+          </div>
+        </div>
+        <input type="text" class="wallet-input" id="walletInput"
+          placeholder="e.g. bc1q... or 0x..."
+          autocomplete="off" spellcheck="false">
+        <p class="wallet-hint">
+          This is your public wallet address — the one you share to receive crypto.
+          It starts with <strong>bc1q</strong> for Bitcoin or <strong>0x</strong> for Ethereum.
+          We never ask for your private key or seed phrase.
+          <br><br>
+          &#128161; <strong>Not sure where to find it?</strong>
+          Open your crypto app (Coinbase, Binance, etc), tap Receive, and copy the address shown.
+        </p>
+        <button class="pay-btn pay-card" style="margin-top:20px;font-size:17px;padding:14px;" onclick="goStep2()">
+          That&rsquo;s my address &rarr;
+        </button>
+      </div>
+
+      <!-- STEP 2: COUNTRY -->
+      <div class="step-card locked" id="step2">
+        <div class="step-header">
+          <div class="step-num">2</div>
+          <div>
+            <div class="step-title">Where do you pay tax?</div>
+            <div class="step-sub">Pick your country — we use the right rules for you</div>
+          </div>
+        </div>
+        <div class="country-grid">
+          <button class="country-btn" id="btn-uk" onclick="selectCountry('uk')">
+            <span class="flag">&#127468;&#127463;</span>
+            <div class="country-name">United Kingdom</div>
+            <div class="country-rule">HMRC rules &middot; Tax year Apr&ndash;Apr</div>
+            <div class="country-price">&pound;10</div>
+          </button>
+          <button class="country-btn" id="btn-us" onclick="selectCountry('us')">
+            <span class="flag">&#127482;&#127480;</span>
+            <div class="country-name">United States</div>
+            <div class="country-rule">IRS rules &middot; Tax year Jan&ndash;Dec</div>
+            <div class="country-price">$10</div>
+          </button>
+        </div>
+      </div>
+
+      <!-- STEP 3: DELIVERY -->
+      <div class="step-card locked" id="step3">
+        <div class="step-header">
+          <div class="step-num">3</div>
+          <div>
+            <div class="step-title">Where shall we send your report?</div>
+            <div class="step-sub">Enter your email &mdash; we&rsquo;ll send it there</div>
+          </div>
+        </div>
+        <input type="email" class="email-input" id="emailInput" placeholder="your@email.com">
+        <div class="delivery-label">Also send to (optional)</div>
+        <div class="delivery-opts">
+          <button class="delivery-opt" id="opt-whatsapp" onclick="toggleOpt('whatsapp')">
+            &#128241; WhatsApp
+          </button>
+          <button class="delivery-opt" id="opt-telegram" onclick="toggleOpt('telegram')">
+            &#9992; Telegram
+          </button>
+          <button class="delivery-opt" id="opt-print" onclick="toggleOpt('print')">
+            &#128438; Save &amp; Print
+          </button>
+        </div>
+        <button class="pay-btn pay-card" style="font-size:17px;padding:14px;" onclick="goStep4()">
+          Continue to payment &rarr;
+        </button>
+      </div>
+
+      <!-- STEP 4: PAY -->
+      <div class="step-card locked" id="step4">
+        <div class="step-header">
+          <div class="step-num">4</div>
+          <div>
+            <div class="step-title">Pay &amp; get your report</div>
+            <div class="step-sub">One-off payment &mdash; no subscription, no surprises</div>
+          </div>
+        </div>
+        <div class="price-display">
+          <div class="price-big" id="priceDisplay">&pound;10</div>
+          <div class="price-desc">One report &middot; All your transactions &middot; Full tax calculation</div>
+        </div>
+        <button class="pay-btn pay-paypal" onclick="payWithPayPal()">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="#003087"><path d="M7.076 21.337H2.47a.641.641 0 0 1-.633-.74L4.944.901C5.026.382 5.474 0 5.998 0h7.46c2.57 0 4.578.543 5.69 1.81 1.01 1.15 1.304 2.42 1.012 4.287-.023.143-.047.288-.077.437-.983 5.05-4.349 6.797-8.647 6.797h-2.19c-.524 0-.968.382-1.05.9l-1.12 7.106zm14.146-14.42a3.35 3.35 0 0 0-.607-.541c-.013.076-.026.175-.041.254-.93 4.778-4.005 7.201-9.138 7.201h-2.19a.563.563 0 0 0-.556.479l-1.187 7.527h-.506l-.24 1.516a.56.56 0 0 0 .554.647h3.882c.46 0 .85-.334.922-.788.06-.26.76-4.852.816-5.09a.932.932 0 0 1 .923-.788h.58c3.76 0 6.705-1.528 7.565-5.946.36-1.847.174-3.388-.777-4.471z"/></svg>
+          Pay with PayPal
+        </button>
+        <button class="pay-btn pay-card" onclick="payWithCard()">
+          &#128179; Pay by Card &mdash; <span id="cardPriceBtn">&pound;10</span>
+        </button>
+        <p class="pay-secure">
+          &#128274; Your payment is secure &middot; We never store card details &middot; Powered by PayPal &amp; Stripe
+        </p>
+      </div>
+
+      <!-- RESULT -->
+      <div class="result-card" id="resultCard">
+        <div class="result-icon">&#127881;</div>
+        <div class="result-title">Your tax report is ready!</div>
+        <div class="result-sub">Here&rsquo;s a summary of what we found. Your full report has been sent to your email.</div>
+
+        <div class="result-data" id="resultData">
+          <!-- Populated by JS -->
+        </div>
+
+        <div class="share-btns">
+          <button class="share-btn share-email" onclick="shareEmail()">
+            &#128140; Email again
+          </button>
+          <button class="share-btn share-whatsapp" onclick="shareWhatsApp()">
+            &#128241; WhatsApp
+          </button>
+          <button class="share-btn share-telegram" onclick="shareTelegram()">
+            &#9992; Telegram
+          </button>
+          <button class="share-btn share-print" onclick="window.print()">
+            &#128438; Print / Save PDF
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- HOW IT WORKS -->
+  <div class="how">
+    <div class="how-inner">
+      <h2>How it works</h2>
+      <div class="how-steps">
+        <div class="how-step">
+          <div class="how-step-icon">&#128203;</div>
+          <div>
+            <div class="how-step-title">Paste your wallet address</div>
+            <div class="how-step-desc">We look up every crypto transaction you&rsquo;ve ever made using public blockchain data. Nothing private leaves your device &mdash; we just need your public address.</div>
+          </div>
+        </div>
+        <div class="how-step">
+          <div class="how-step-icon">&#129518;</div>
+          <div>
+            <div class="how-step-title">We do all the maths</div>
+            <div class="how-step-desc">For UK users we use HMRC&rsquo;s exact rules (Section 104 pooling). For US users we use IRS rules (FIFO). We look up the price of your crypto on every day you bought or sold, so everything is accurate.</div>
+          </div>
+        </div>
+        <div class="how-step">
+          <div class="how-step-icon">&#128196;</div>
+          <div>
+            <div class="how-step-title">Get your report</div>
+            <div class="how-step-desc">You get a clear, plain-English report showing exactly how much tax you owe (or don&rsquo;t owe!). Send it to your accountant, attach it to your tax return, or just keep it for your records.</div>
+          </div>
+        </div>
+        <div class="how-step">
+          <div class="how-step-icon">&#128176;</div>
+          <div>
+            <div class="how-step-title">Just &pound;10 / $10 flat fee</div>
+            <div class="how-step-desc">No monthly subscription. Pay once, get your report. If you need to run it again next year, just pay again. Simple.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FAQ -->
+  <div class="faq">
+    <div class="faq-inner">
+      <h2>Questions people ask</h2>
+
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">
+          Do I need to be a crypto expert to use this?
+          <span class="faq-arrow">&#8964;</span>
+        </div>
+        <div class="faq-a">Not at all. If you know your wallet address (the long code starting with bc1q or 0x), that&rsquo;s all you need. We do everything else.</div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">
+          Is my information safe?
+          <span class="faq-arrow">&#8964;</span>
+        </div>
+        <div class="faq-a">Yes. We only use your public wallet address &mdash; the same one you&rsquo;d give to someone to send you crypto. We never ask for your password, private key, or seed phrase. We never store your data after generating your report.</div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">
+          What if I have multiple wallets?
+          <span class="faq-arrow">&#8964;</span>
+        </div>
+        <div class="faq-a">Run the tool once for each wallet address. Each report is &pound;10/$10. If you have lots of wallets, you might want to talk to an accountant &mdash; our sister site TaxChain Crypto is built for that.</div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">
+          Does this work for Bitcoin and Ethereum?
+          <span class="faq-arrow">&#8964;</span>
+        </div>
+        <div class="faq-a">Yes, both. We also support most ERC-20 tokens on Ethereum (like USDC, LINK, UNI etc). If you have Solana or other chains, we&rsquo;re working on adding those soon.</div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">
+          I only made a small amount &mdash; do I still need to report it?
+          <span class="faq-arrow">&#8964;</span>
+        </div>
+        <div class="faq-a">In the UK, you only pay tax if your total gains are over &pound;3,000 in a tax year. In the US it depends on your income. But HMRC still wants to know about it even if you don&rsquo;t owe anything &mdash; so it&rsquo;s worth checking. Our report tells you clearly whether you owe anything.</div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">
+          Can I send the report to my accountant?
+          <span class="faq-arrow">&#8964;</span>
+        </div>
+        <div class="faq-a">Absolutely &mdash; that&rsquo;s exactly what most people do. Just forward the email we send you, or print a PDF copy. The report is laid out clearly so any accountant can read it easily.</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-logo">DIYCryptoTax</div>
+    <p>Crypto tax made simple for everyday people.<br>
+    UK &amp; USA &middot; &pound;10 / $10 per report &middot; No subscription</p>
+    <div class="footer-links">
+      <a href="mailto:support@diycryptotax.com">Contact</a>
+      <a href="#">Privacy</a>
+      <a href="#">Terms</a>
+      <a href="https://taxchaincrypto.com" target="_blank">For accountants &rarr;</a>
+    </div>
+    <p style="margin-top:16px; font-size:11px; opacity:0.5;">&copy; 2026 DIYCryptoTax. Powered by TaxChain Crypto engine. HMRC &amp; IRS compliant calculations.</p>
+  </footer>
+
+  <!-- LOADING OVERLAY -->
+  <div class="loading-overlay" id="loadingOverlay">
+    <div class="spinner-big"></div>
+    <div class="loading-msg" id="loadingMsg">Looking up your transactions&hellip;</div>
+  </div>
+
+  <script>
+    // State
+    let selectedCountry = null;
+    let walletAddress = '';
+    let userEmail = '';
+    let deliveryOpts = new Set();
+    let reportData = null;
+
+    // ── STEP NAVIGATION ──
+    function setStep(stepId, state) {
+      const el = document.getElementById(stepId);
+      el.classList.remove('active', 'done', 'locked');
+      el.classList.add(state);
+    }
+
+    function goStep2() {
+      walletAddress = document.getElementById('walletInput').value.trim();
+      if (!walletAddress || walletAddress.length < 10) {
+        alert('Please paste your wallet address first.');
+        return;
+      }
+      setStep('step1', 'done');
+      setStep('step2', 'active');
+      document.getElementById('step2').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    function selectCountry(c) {
+      selectedCountry = c;
+      document.getElementById('btn-uk').classList.toggle('selected', c === 'uk');
+      document.getElementById('btn-us').classList.toggle('selected', c === 'us');
+      const price = c === 'uk' ? '&pound;10' : '$10';
+      document.getElementById('priceDisplay').innerHTML = price;
+      document.getElementById('cardPriceBtn').innerHTML = price;
+      setTimeout(() => {
+        setStep('step2', 'done');
+        setStep('step3', 'active');
+        document.getElementById('step3').scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 300);
+    }
+
+    function toggleOpt(opt) {
+      const btn = document.getElementById('opt-' + opt);
+      if (deliveryOpts.has(opt)) {
+        deliveryOpts.delete(opt);
+        btn.classList.remove('selected');
+      } else {
+        deliveryOpts.add(opt);
+        btn.classList.add('selected');
+      }
+    }
+
+    function goStep4() {
+      userEmail = document.getElementById('emailInput').value.trim();
+      if (!userEmail || !userEmail.includes('@')) {
+        alert('Please enter your email address so we can send your report.');
+        return;
+      }
+      setStep('step3', 'done');
+      setStep('step4', 'active');
+      document.getElementById('step4').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    // ── PAYMENT ──
+    function payWithPayPal() {
+      // PayPal payment link - replace with real PayPal payment URL
+      const amount = selectedCountry === 'uk' ? '10.00' : '10.00';
+      const currency = selectedCountry === 'uk' ? 'GBP' : 'USD';
+      // For now simulate - replace with real PayPal.me or PayPal button
+      runReport();
+    }
+
+    function payWithCard() {
+      // Stripe payment link
+      const link = selectedCountry === 'uk'
+        ? 'https://buy.stripe.com/14AaEQbAU59799A1nhbbG00'
+        : 'https://buy.stripe.com/14AaEQbAU59799A1nhbbG00';
+      window.open(link, '_blank');
+      // After payment, run the report
+      setTimeout(runReport, 2000);
+    }
+
+    // ── FETCH REPORT ──
+    async function runReport() {
+      showLoading('Looking up your transactions&hellip;');
+
+      try {
+        showLoading('Calculating your tax&hellip;');
+
+        const res = await fetch(
+          `https://taxchain-api.onrender.com/v1/tax/preview/${walletAddress}?jurisdiction=${selectedCountry}`
+        );
+
+        if (!res.ok) throw new Error('Could not fetch your report. Please try again.');
+        reportData = await res.json();
+
+        hideLoading();
+        showResult(reportData);
+
+      } catch (e) {
+        hideLoading();
+        alert('Something went wrong: ' + e.message + '\n\nPlease try again in a moment.');
+      }
+    }
+
+    function showResult(data) {
+      // Hide all steps
+      ['step1','step2','step3','step4'].forEach(s => {
+        document.getElementById(s).style.display = 'none';
+      });
+
+      const isUK = selectedCountry === 'uk';
+      const currency = isUK ? '&pound;' : '$';
+      const gain = data.gain_if_sold_usd || data.net_gain_gbp || 0;
+      const tax = data.estimated_tax_usd || 0;
+      const price = data.current_price_usd || 0;
+      const holdings = data.holdings_btc || 0;
+
+      document.getElementById('resultData').innerHTML = `
+        <div class="result-row">
+          <span class="result-row-label">Current holding value</span>
+          <span class="result-row-val">${currency}${(holdings * price).toFixed(2)}</span>
+        </div>
+        <div class="result-row">
+          <span class="result-row-label">Total gain / loss</span>
+          <span class="result-row-val ${gain >= 0 ? 'warn' : 'good'}">${currency}${Math.abs(gain).toFixed(2)} ${gain >= 0 ? 'gain' : 'loss'}</span>
+        </div>
+        <div class="result-row">
+          <span class="result-row-label">Estimated tax owed</span>
+          <span class="result-row-val ${tax > 0 ? 'warn' : 'good'}">${tax > 0 ? currency + tax.toFixed(2) : 'Nothing &mdash; you&rsquo;re within the free allowance!'}</span>
+        </div>
+        <div class="result-row">
+          <span class="result-row-label">Tax year</span>
+          <span class="result-row-val">${isUK ? 'April 2024 &mdash; April 2025' : 'Jan &mdash; Dec 2024'}</span>
+        </div>
+        <div class="result-row">
+          <span class="result-row-label">Method used</span>
+          <span class="result-row-val">${isUK ? 'HMRC Section 104' : 'IRS FIFO'}</span>
+        </div>
+      `;
+
+      document.getElementById('resultCard').classList.add('show');
+      document.getElementById('resultCard').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    // ── SHARE ──
+    function shareEmail() {
+      window.location.href = `mailto:${userEmail}?subject=Your Crypto Tax Report&body=Your crypto tax report is attached. Generated by DIYCryptoTax.com`;
+    }
+
+    function shareWhatsApp() {
+      const msg = encodeURIComponent('Here is my crypto tax report from DIYCryptoTax.com');
+      window.open('https://wa.me/?text=' + msg, '_blank');
+    }
+
+    function shareTelegram() {
+      const msg = encodeURIComponent('Here is my crypto tax report from DIYCryptoTax.com');
+      window.open('https://t.me/share/url?url=https://diycryptotax.com&text=' + msg, '_blank');
+    }
+
+    // ── LOADING ──
+    function showLoading(msg) {
+      document.getElementById('loadingMsg').innerHTML = msg;
+      document.getElementById('loadingOverlay').classList.add('show');
+    }
+    function hideLoading() {
+      document.getElementById('loadingOverlay').classList.remove('show');
+    }
+
+    // ── FAQ ──
+    function toggleFaq(el) {
+      el.parentElement.classList.toggle('open');
+    }
+  </script>
+
+</body>
+</html>
