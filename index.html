@@ -1,228 +1,487 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>DIY Crypto Tax &mdash; Your crypto tax sorted in minutes</title>
-  <meta name="description" content="Work out your crypto tax in minutes. Just paste your wallet address, pick UK or USA, pay &pound;10 and get your tax report. No accountant needed.">
+  <title>DIYCryptoTax &mdash; Know exactly what you owe. Not a penny more.</title>
+  <meta name="description" content="Your official-grade crypto tax report in minutes. HMRC &amp; IRS compliant. &pound;10 flat fee. No accountant needed.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,600;0,700;0,900;1,600&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --green:   #16a34a;
-      --green2:  #22c55e;
-      --green3:  #dcfce7;
-      --blue:    #2563eb;
-      --blue2:   #dbeafe;
-      --text:    #111827;
-      --muted:   #6b7280;
-      --border:  #e5e7eb;
-      --bg:      #f9fafb;
-      --white:   #ffffff;
-      --red:     #dc2626;
-      --yellow:  #fbbf24;
-      --radius:  16px;
+      --teal:        #00A499;
+      --teal-dark:   #003B36;
+      --teal-deep:   #00726A;
+      --teal-light:  #E8F7F6;
+      --teal-mid:    #B3E0DD;
+      --gold:        #C9A84C;
+      --gold-light:  #FDF6E3;
+      --gov-red:     #D4351C;
+      --white:       #FFFFFF;
+      --off:         #F8F8F7;
+      --text:        #0B0C0C;
+      --muted:       #505A5F;
+      --border:      #B1B4B6;
+      --border-light:#DEE0E2;
+      --focus:       #FFDD00;
+      --radius:      4px;
+      --radius-lg:   8px;
     }
 
     html { scroll-behavior: smooth; }
 
     body {
       font-family: 'Inter', system-ui, sans-serif;
-      background: var(--bg);
+      background: var(--off);
       color: var(--text);
       -webkit-font-smoothing: antialiased;
-      line-height: 1.6;
+      font-size: 16px;
+      line-height: 1.5;
     }
 
-    a { text-decoration: none; color: inherit; }
+    a { color: var(--teal-deep); text-decoration: underline; }
+    a:hover { color: var(--teal-dark); }
+    a:focus { outline: 3px solid var(--focus); outline-offset: 0; background: var(--focus); color: var(--text); text-decoration: none; }
+
+    /* ── GOV BANNER ── */
+    .gov-banner {
+      background: var(--teal-dark);
+      color: white;
+      padding: 8px 0;
+      font-size: 13px;
+    }
+    .gov-banner-inner {
+      max-width: 640px; margin: 0 auto; padding: 0 20px;
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 12px; flex-wrap: wrap;
+    }
+    .gov-banner-left {
+      display: flex; align-items: center; gap: 10px;
+    }
+    .gov-seal {
+      width: 28px; height: 28px;
+      border: 2px solid var(--gold);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 14px; color: var(--gold); flex-shrink: 0;
+      font-weight: 700;
+    }
+    .gov-banner-text { color: rgba(255,255,255,0.85); font-size: 12px; line-height: 1.4; }
+    .gov-banner-text strong { color: white; }
+    .not-hmrc {
+      font-size: 11px; color: rgba(255,255,255,0.55);
+      border-left: 1px solid rgba(255,255,255,0.2);
+      padding-left: 12px; line-height: 1.4;
+    }
 
     /* ── NAV ── */
     nav {
-      background: var(--white);
-      border-bottom: 1px solid var(--border);
-      padding: 0 20px;
+      background: var(--teal);
+      padding: 0;
+      border-bottom: 4px solid var(--gold);
     }
     .nav-inner {
-      max-width: 720px; margin: 0 auto;
-      height: 60px; display: flex;
-      align-items: center; justify-content: space-between;
+      max-width: 640px; margin: 0 auto;
+      padding: 0 20px; height: 56px;
+      display: flex; align-items: center; justify-content: space-between;
     }
     .logo {
-      font-family: 'Nunito', sans-serif;
-      font-weight: 900; font-size: 20px;
-      color: var(--green);
-      letter-spacing: -0.02em;
+      font-family: 'Source Serif 4', Georgia, serif;
+      font-weight: 700; font-size: 20px;
+      color: white; letter-spacing: -0.01em;
+      text-decoration: none;
     }
-    .logo span { color: var(--text); }
-    .nav-flag { font-size: 22px; }
+    .logo span {
+      color: var(--gold);
+    }
+    .nav-right {
+      font-size: 13px; color: rgba(255,255,255,0.75);
+      display: flex; align-items: center; gap: 4px;
+    }
+    .nav-right strong { color: white; font-size: 15px; }
 
     /* ── HERO ── */
     .hero {
-      background: linear-gradient(160deg, #f0fdf4 0%, #eff6ff 100%);
-      padding: 56px 20px 48px;
-      text-align: center;
-      border-bottom: 1px solid var(--border);
+      background: var(--teal-dark);
+      padding: 48px 20px 40px;
+      position: relative;
+      overflow: hidden;
     }
-    .hero-emoji { font-size: 52px; margin-bottom: 16px; display: block; }
-    .hero h1 {
-      font-family: 'Nunito', sans-serif;
-      font-size: clamp(28px, 6vw, 48px);
-      font-weight: 900; line-height: 1.15;
-      color: var(--text); margin-bottom: 16px;
-      letter-spacing: -0.02em;
+    .hero::after {
+      content: '';
+      position: absolute;
+      bottom: -1px; left: 0; right: 0;
+      height: 32px;
+      background: var(--off);
+      clip-path: ellipse(55% 100% at 50% 100%);
     }
-    .hero h1 span { color: var(--green); }
-    .hero-sub {
-      font-size: clamp(16px, 3vw, 19px);
-      color: var(--muted); max-width: 500px;
-      margin: 0 auto 32px; line-height: 1.6;
-    }
-    .hero-badges {
-      display: flex; gap: 10px;
-      justify-content: center; flex-wrap: wrap;
-    }
-    .badge {
-      background: var(--white);
-      border: 1px solid var(--border);
-      border-radius: 20px; padding: 6px 14px;
-      font-size: 13px; font-weight: 600;
-      color: var(--muted);
-      display: flex; align-items: center; gap: 6px;
-    }
-    .badge-green { background: var(--green3); border-color: #bbf7d0; color: var(--green); }
+    .hero-inner { max-width: 640px; margin: 0 auto; position: relative; z-index: 1; }
 
-    /* ── MAIN CARD ── */
-    .main { padding: 32px 20px 60px; }
-    .card-wrap { max-width: 620px; margin: 0 auto; }
-
-    .step-card {
-      background: var(--white);
-      border: 2px solid var(--border);
-      border-radius: var(--radius);
-      padding: 28px;
-      margin-bottom: 16px;
-      transition: border-color 0.2s;
-    }
-    .step-card.active { border-color: var(--green); }
-    .step-card.done { border-color: #bbf7d0; background: #f0fdf4; }
-    .step-card.locked { opacity: 0.45; pointer-events: none; }
-
-    .step-header {
-      display: flex; align-items: center; gap: 14px;
+    .hero-kicker {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: rgba(201,168,76,0.15);
+      border: 1px solid rgba(201,168,76,0.4);
+      color: var(--gold);
+      font-size: 11px; font-weight: 700;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      padding: 5px 12px; border-radius: 2px;
       margin-bottom: 20px;
     }
-    .step-num {
-      width: 36px; height: 36px; border-radius: 50%;
-      background: var(--green); color: var(--white);
-      font-family: 'Nunito', sans-serif;
-      font-weight: 900; font-size: 16px;
-      display: flex; align-items: center; justify-content: center;
-      flex-shrink: 0;
+
+    .hero h1 {
+      font-family: 'Source Serif 4', Georgia, serif;
+      font-size: clamp(28px, 5vw, 42px);
+      font-weight: 900; line-height: 1.12;
+      color: white; margin-bottom: 16px;
+      letter-spacing: -0.02em;
     }
-    .step-card.done .step-num { background: var(--green2); }
-    .step-card.locked .step-num { background: var(--border); color: var(--muted); }
-    .step-title {
-      font-family: 'Nunito', sans-serif;
-      font-weight: 800; font-size: 18px;
+    .hero h1 em {
+      font-style: italic;
+      color: var(--teal);
+      -webkit-text-stroke: 0px;
+    }
+
+    .hero-sub {
+      font-size: 17px; color: rgba(255,255,255,0.72);
+      max-width: 520px; line-height: 1.65; margin-bottom: 32px;
+    }
+
+    .hero-trust {
+      display: flex; flex-wrap: wrap; gap: 8px;
+    }
+    .trust-pill {
+      display: flex; align-items: center; gap: 6px;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 2px; padding: 6px 12px;
+      font-size: 13px; color: rgba(255,255,255,0.8);
+      font-weight: 500;
+    }
+    .trust-pill .check { color: var(--teal); font-weight: 700; }
+
+    /* ── PROGRESS BAR ── */
+    .progress-wrap {
+      max-width: 640px; margin: 32px auto 0;
+      padding: 0 20px;
+    }
+    .progress-header {
+      display: flex; justify-content: space-between;
+      align-items: center; margin-bottom: 8px;
+    }
+    .progress-label {
+      font-size: 13px; font-weight: 700;
+      color: var(--teal-deep); text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+    .progress-step-label {
+      font-size: 13px; color: var(--muted);
+    }
+    .progress-track {
+      height: 6px; background: var(--border-light);
+      border-radius: 3px; overflow: hidden;
+    }
+    .progress-fill {
+      height: 100%; background: var(--teal);
+      border-radius: 3px;
+      transition: width 0.4s ease;
+      width: 0%;
+    }
+    .progress-steps {
+      display: flex; justify-content: space-between;
+      margin-top: 8px;
+    }
+    .ps {
+      font-size: 11px; font-weight: 600;
+      color: var(--border); text-align: center;
+      transition: color 0.3s;
+      flex: 1;
+    }
+    .ps.active { color: var(--teal-deep); }
+    .ps.done { color: var(--teal); }
+
+    /* ── MAIN ── */
+    .main { max-width: 640px; margin: 0 auto; padding: 24px 20px 60px; }
+
+    /* ── CARDS ── */
+    .card {
+      background: var(--white);
+      border: 1px solid var(--border-light);
+      border-top: 4px solid var(--border-light);
+      border-radius: var(--radius-lg);
+      padding: 28px;
+      margin-bottom: 16px;
+      transition: border-top-color 0.3s, opacity 0.3s;
+    }
+    .card.active { border-top-color: var(--teal); }
+    .card.done { border-top-color: var(--teal); opacity: 1; }
+    .card.locked { opacity: 0.4; pointer-events: none; }
+
+    .card-head {
+      display: flex; align-items: flex-start;
+      gap: 14px; margin-bottom: 24px;
+    }
+    .card-num {
+      width: 32px; height: 32px; flex-shrink: 0;
+      background: var(--teal); color: white;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 700; font-size: 14px;
+      font-family: 'Inter', sans-serif;
+      transition: background 0.3s;
+    }
+    .card.locked .card-num { background: var(--border); }
+    .card.done .card-num { background: var(--teal); }
+    .card.done .card-num::after { content: '✓'; }
+    .card.done .card-num-text { display: none; }
+
+    .card-title {
+      font-family: 'Source Serif 4', Georgia, serif;
+      font-weight: 700; font-size: 20px;
+      color: var(--teal-dark); line-height: 1.2;
+    }
+    .card-sub {
+      font-size: 14px; color: var(--muted);
+      margin-top: 3px;
+    }
+
+    /* ── STEP 1: COUNTRY ── */
+    .country-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .country-card {
+      border: 2px solid var(--border-light);
+      border-radius: var(--radius-lg);
+      padding: 20px 16px; cursor: pointer;
+      text-align: center; background: var(--white);
+      transition: all 0.15s; position: relative;
+      overflow: hidden;
+    }
+    .country-card:hover { border-color: var(--teal); }
+    .country-card.selected {
+      border-color: var(--teal);
+      background: var(--teal-light);
+    }
+    .country-card.selected::after {
+      content: '✓';
+      position: absolute; top: 8px; right: 10px;
+      color: var(--teal); font-weight: 700; font-size: 14px;
+    }
+    .country-flag { font-size: 36px; margin-bottom: 8px; display: block; }
+    .country-name {
+      font-weight: 700; font-size: 16px;
+      color: var(--teal-dark); margin-bottom: 4px;
+    }
+    .country-rule {
+      font-size: 12px; color: var(--muted);
+      line-height: 1.4; margin-bottom: 8px;
+    }
+    .country-price {
+      font-family: 'Source Serif 4', serif;
+      font-size: 22px; font-weight: 700;
+      color: var(--teal);
+    }
+
+    /* ── STEP 2: YOUR DETAILS ── */
+    .form-group { margin-bottom: 20px; }
+    .form-label {
+      display: block; font-weight: 600;
+      font-size: 15px; color: var(--text);
+      margin-bottom: 5px;
+    }
+    .form-hint {
+      font-size: 13px; color: var(--muted);
+      margin-bottom: 6px; line-height: 1.4;
+    }
+    .form-optional {
+      font-size: 12px; color: var(--muted);
+      font-weight: 400; margin-left: 4px;
+    }
+    .form-input {
+      width: 100%; padding: 10px 12px;
+      border: 2px solid var(--border);
+      border-radius: var(--radius);
+      font-size: 16px; font-family: 'Inter', sans-serif;
+      color: var(--text); background: var(--white);
+      outline: none; transition: border-color 0.15s;
+      -webkit-appearance: none;
+    }
+    .form-input:focus {
+      border-color: var(--teal);
+      outline: 3px solid var(--focus);
+      outline-offset: 0;
+    }
+    .form-input::placeholder { color: #aaa; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+    .ref-number {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px; color: var(--muted);
+      background: var(--off); border: 1px solid var(--border-light);
+      border-radius: var(--radius); padding: 8px 12px;
+      margin-top: 16px; display: flex;
+      align-items: center; gap: 8px;
+    }
+    .ref-number span { color: var(--teal-deep); font-weight: 500; }
+
+    /* ── STEP 3: YOUR SITUATION ── */
+    .situation-intro {
+      background: var(--teal-light);
+      border-left: 4px solid var(--teal);
+      padding: 12px 16px; border-radius: 0 var(--radius) var(--radius) 0;
+      font-size: 14px; color: var(--teal-dark);
+      margin-bottom: 20px; line-height: 1.6;
+    }
+
+    .tick-group { margin-bottom: 20px; }
+    .tick-group-label {
+      font-size: 11px; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.1em;
+      color: var(--muted); margin-bottom: 10px;
+      padding-bottom: 6px;
+      border-bottom: 1px solid var(--border-light);
+    }
+
+    .tick-item {
+      display: flex; align-items: flex-start;
+      gap: 12px; padding: 12px 0;
+      border-bottom: 1px solid var(--border-light);
+      cursor: pointer;
+    }
+    .tick-item:last-child { border-bottom: none; }
+    .tick-item:hover .tick-box { border-color: var(--teal); }
+
+    .tick-box {
+      width: 24px; height: 24px; flex-shrink: 0;
+      border: 2px solid var(--border);
+      border-radius: var(--radius);
+      background: var(--white);
+      display: flex; align-items: center; justify-content: center;
+      transition: all 0.15s; margin-top: 1px;
+    }
+    .tick-box.checked {
+      background: var(--teal);
+      border-color: var(--teal);
+    }
+    .tick-box.checked::after {
+      content: '✓'; color: white;
+      font-size: 14px; font-weight: 700;
+    }
+    .tick-content { flex: 1; }
+    .tick-title {
+      font-weight: 600; font-size: 15px;
+      color: var(--text); line-height: 1.3;
+    }
+    .tick-desc {
+      font-size: 13px; color: var(--muted);
+      margin-top: 2px; line-height: 1.5;
+    }
+    .tick-tag {
+      font-size: 11px; font-weight: 700;
+      padding: 2px 7px; border-radius: 2px;
+      text-transform: uppercase; letter-spacing: 0.06em;
+      margin-left: 6px; vertical-align: middle;
+    }
+    .tag-saving { background: #E8F5E9; color: #2E7D32; }
+    .tag-required { background: #FFF3E0; color: #E65100; }
+
+    .wallet-section { margin-top: 24px; }
+    .wallet-label-row {
+      display: flex; align-items: center;
+      justify-content: space-between; margin-bottom: 5px;
+    }
+    .wallet-help {
+      font-size: 12px; color: var(--teal-deep);
+      cursor: pointer; text-decoration: underline;
+    }
+    .wallet-help-text {
+      display: none;
+      background: var(--teal-light);
+      border: 1px solid var(--teal-mid);
+      border-radius: var(--radius);
+      padding: 12px; font-size: 13px;
+      color: var(--teal-dark); line-height: 1.6;
+      margin-top: 8px;
+    }
+    .wallet-help-text.show { display: block; }
+
+    /* ── STEP 4: PAY ── */
+    .summary-box {
+      background: var(--teal-light);
+      border: 1px solid var(--teal-mid);
+      border-radius: var(--radius-lg);
+      padding: 20px; margin-bottom: 24px;
+    }
+    .summary-title {
+      font-family: 'Source Serif 4', serif;
+      font-size: 15px; font-weight: 700;
+      color: var(--teal-dark); margin-bottom: 12px;
+      text-transform: uppercase; letter-spacing: 0.06em;
+      font-size: 12px;
+    }
+    .summary-row {
+      display: flex; justify-content: space-between;
+      font-size: 14px; padding: 5px 0;
+      border-bottom: 1px solid var(--teal-mid);
       color: var(--text);
     }
-    .step-sub { font-size: 13px; color: var(--muted); margin-top: 2px; }
+    .summary-row:last-child { border-bottom: none; }
+    .summary-row-label { color: var(--muted); }
+    .summary-row-val { font-weight: 600; }
+    .summary-total {
+      display: flex; justify-content: space-between;
+      align-items: center; margin-top: 12px;
+      padding-top: 12px;
+      border-top: 2px solid var(--teal);
+    }
+    .summary-total-label {
+      font-family: 'Source Serif 4', serif;
+      font-weight: 700; font-size: 16px;
+      color: var(--teal-dark);
+    }
+    .summary-total-price {
+      font-family: 'Source Serif 4', serif;
+      font-size: 32px; font-weight: 900;
+      color: var(--teal-dark);
+    }
 
-    /* Step 1 - Wallet */
-    .wallet-input {
-      width: 100%; padding: 14px 16px;
-      border: 2px solid var(--border);
-      border-radius: 10px; font-size: 15px;
-      font-family: 'Inter', monospace;
-      color: var(--text); outline: none;
-      transition: border-color 0.15s;
-      background: var(--white);
-    }
-    .wallet-input:focus { border-color: var(--green); }
-    .wallet-input::placeholder { color: #9ca3af; }
-    .wallet-hint {
-      font-size: 12px; color: var(--muted);
-      margin-top: 8px; line-height: 1.5;
-    }
-    .wallet-hint a { color: var(--green); font-weight: 600; }
-
-    /* Step 2 - Country */
-    .country-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-    .country-btn {
-      border: 2px solid var(--border);
-      border-radius: 12px; padding: 16px;
-      background: var(--white); cursor: pointer;
-      text-align: center; transition: all 0.15s;
-      font-family: 'Nunito', sans-serif;
-    }
-    .country-btn:hover { border-color: var(--green); }
-    .country-btn.selected { border-color: var(--green); background: var(--green3); }
-    .country-btn .flag { font-size: 32px; margin-bottom: 8px; display: block; }
-    .country-btn .country-name { font-weight: 800; font-size: 16px; color: var(--text); }
-    .country-btn .country-rule { font-size: 12px; color: var(--muted); margin-top: 4px; font-weight: 600; }
-    .country-btn .country-price { font-size: 18px; font-weight: 900; color: var(--green); margin-top: 6px; }
-
-    /* Step 3 - Email */
-    .email-input {
-      width: 100%; padding: 14px 16px;
-      border: 2px solid var(--border);
-      border-radius: 10px; font-size: 15px;
-      color: var(--text); outline: none;
-      transition: border-color 0.15s;
-      background: var(--white); margin-bottom: 12px;
-    }
-    .email-input:focus { border-color: var(--green); }
-
-    .delivery-label {
-      font-size: 13px; font-weight: 600;
-      color: var(--muted); margin-bottom: 10px;
-      text-transform: uppercase; letter-spacing: 0.06em;
-    }
-    .delivery-opts { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px; }
-    .delivery-opt {
-      border: 2px solid var(--border);
-      border-radius: 8px; padding: 8px 14px;
-      background: var(--white); cursor: pointer;
-      font-size: 13px; font-weight: 600;
-      color: var(--muted); transition: all 0.15s;
-      display: flex; align-items: center; gap: 6px;
-    }
-    .delivery-opt:hover { border-color: var(--green); color: var(--text); }
-    .delivery-opt.selected { border-color: var(--green); background: var(--green3); color: var(--green); }
-
-    /* Step 4 - Pay */
-    .price-display {
-      text-align: center; margin-bottom: 24px;
-    }
-    .price-big {
-      font-family: 'Nunito', sans-serif;
-      font-size: 56px; font-weight: 900;
-      color: var(--green); line-height: 1;
-      letter-spacing: -0.03em;
-    }
-    .price-desc { font-size: 14px; color: var(--muted); margin-top: 6px; }
+    .pay-methods { display: flex; flex-direction: column; gap: 10px; margin-bottom: 16px; }
 
     .pay-btn {
-      width: 100%; padding: 18px;
-      border-radius: 12px; border: none;
-      font-family: 'Nunito', sans-serif;
-      font-size: 20px; font-weight: 900;
+      width: 100%; padding: 16px 20px;
+      border: none; border-radius: var(--radius-lg);
+      font-family: 'Inter', sans-serif;
+      font-size: 16px; font-weight: 700;
       cursor: pointer; transition: all 0.15s;
-      margin-bottom: 10px;
       display: flex; align-items: center;
       justify-content: center; gap: 10px;
+      letter-spacing: -0.01em;
     }
-    .pay-paypal {
-      background: #ffc439; color: #003087;
+    .pay-btn:focus {
+      outline: 3px solid var(--focus);
+      outline-offset: 2px;
     }
-    .pay-paypal:hover { background: #f0b429; transform: translateY(-1px); }
-    .pay-card {
-      background: var(--green); color: var(--white);
+
+    .btn-paypal {
+      background: #FFC439; color: #003087;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
     }
-    .pay-card:hover { background: #15803d; transform: translateY(-1px); }
+    .btn-paypal:hover { background: #f0b429; transform: translateY(-1px); box-shadow: 0 3px 8px rgba(0,0,0,0.15); }
+
+    .btn-card {
+      background: var(--teal); color: white;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+    .btn-card:hover { background: var(--teal-deep); transform: translateY(-1px); box-shadow: 0 3px 8px rgba(0,0,0,0.15); }
+
+    .pay-divider {
+      display: flex; align-items: center; gap: 12px;
+      color: var(--muted); font-size: 12px;
+    }
+    .pay-divider::before, .pay-divider::after {
+      content: ''; flex: 1; height: 1px;
+      background: var(--border-light);
+    }
 
     .pay-secure {
       text-align: center; font-size: 12px;
@@ -230,591 +489,976 @@
       display: flex; align-items: center;
       justify-content: center; gap: 6px;
     }
+    .pay-secure-icon { color: var(--teal); }
 
-    /* ── RESULT CARD ── */
+    /* ── CONTINUE BUTTONS ── */
+    .btn-continue {
+      width: 100%; padding: 14px 20px;
+      background: var(--teal-dark); color: white;
+      border: none; border-radius: var(--radius-lg);
+      font-family: 'Inter', sans-serif;
+      font-size: 16px; font-weight: 700;
+      cursor: pointer; transition: all 0.15s;
+      margin-top: 20px;
+      display: flex; align-items: center;
+      justify-content: center; gap: 8px;
+    }
+    .btn-continue:hover { background: var(--teal-deep); transform: translateY(-1px); }
+    .btn-continue:focus { outline: 3px solid var(--focus); outline-offset: 2px; }
+
+    /* ── RESULT ── */
     .result-card {
-      background: var(--white);
-      border: 2px solid var(--green2);
-      border-radius: var(--radius);
-      padding: 32px; text-align: center;
       display: none;
+      background: white;
+      border: 1px solid var(--border-light);
+      border-top: 4px solid var(--teal);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
     }
     .result-card.show { display: block; }
-    .result-icon { font-size: 56px; margin-bottom: 16px; }
-    .result-title {
-      font-family: 'Nunito', sans-serif;
-      font-size: 24px; font-weight: 900;
-      color: var(--text); margin-bottom: 8px;
-    }
-    .result-sub { font-size: 15px; color: var(--muted); margin-bottom: 28px; }
 
-    .result-data {
-      background: var(--bg);
-      border: 1px solid var(--border);
-      border-radius: 12px; padding: 20px;
-      text-align: left; margin-bottom: 24px;
+    .result-header {
+      background: var(--teal-dark);
+      padding: 28px;
+      color: white;
     }
+    .result-doc-type {
+      font-size: 11px; font-weight: 700;
+      letter-spacing: 0.12em; text-transform: uppercase;
+      color: var(--gold); margin-bottom: 8px;
+    }
+    .result-title {
+      font-family: 'Source Serif 4', serif;
+      font-size: 22px; font-weight: 700;
+      margin-bottom: 4px;
+    }
+    .result-name {
+      font-size: 15px; color: rgba(255,255,255,0.7);
+    }
+    .result-ref {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px; color: var(--gold);
+      margin-top: 12px; opacity: 0.8;
+    }
+
+    .result-body { padding: 28px; }
+
+    .result-verdict {
+      border-radius: var(--radius-lg);
+      padding: 20px; margin-bottom: 24px;
+      text-align: center;
+    }
+    .verdict-good { background: #E8F5E9; border: 1px solid #A5D6A7; }
+    .verdict-warn { background: #FFF3E0; border: 1px solid #FFCC80; }
+    .verdict-icon { font-size: 36px; margin-bottom: 8px; }
+    .verdict-headline {
+      font-family: 'Source Serif 4', serif;
+      font-size: 20px; font-weight: 700;
+      color: var(--teal-dark); margin-bottom: 6px;
+    }
+    .verdict-sub { font-size: 14px; color: var(--muted); }
+
+    .result-section-title {
+      font-size: 11px; font-weight: 700;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--muted); margin-bottom: 12px;
+      padding-bottom: 6px;
+      border-bottom: 1px solid var(--border-light);
+    }
+
+    .result-table { width: 100%; margin-bottom: 24px; }
     .result-row {
       display: flex; justify-content: space-between;
-      align-items: center; padding: 10px 0;
-      border-bottom: 1px solid var(--border);
-      font-size: 15px;
+      align-items: flex-start; padding: 11px 0;
+      border-bottom: 1px solid var(--border-light);
+      gap: 12px;
     }
     .result-row:last-child { border-bottom: none; }
-    .result-row-label { color: var(--muted); font-weight: 500; }
-    .result-row-val { font-weight: 700; color: var(--text); }
-    .result-row-val.good { color: var(--green); }
-    .result-row-val.warn { color: var(--red); }
+    .rr-label { font-size: 14px; color: var(--muted); flex: 1; }
+    .rr-val { font-size: 15px; font-weight: 700; color: var(--text); text-align: right; }
+    .rr-val.positive { color: #D4351C; }
+    .rr-val.negative { color: #2E7D32; }
+    .rr-val.neutral { color: var(--teal-deep); }
 
-    .share-btns { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; }
+    .tip-box {
+      background: var(--gold-light);
+      border: 1px solid rgba(201,168,76,0.3);
+      border-left: 4px solid var(--gold);
+      border-radius: 0 var(--radius) var(--radius) 0;
+      padding: 14px 16px; margin-bottom: 16px;
+    }
+    .tip-title {
+      font-weight: 700; font-size: 13px;
+      color: #7B5E00; margin-bottom: 4px;
+      text-transform: uppercase; letter-spacing: 0.06em;
+    }
+    .tip-text { font-size: 13px; color: #5D4500; line-height: 1.6; }
+
+    .share-section { margin-top: 24px; }
+    .share-title {
+      font-size: 13px; font-weight: 700;
+      color: var(--muted); text-transform: uppercase;
+      letter-spacing: 0.08em; margin-bottom: 12px;
+    }
+    .share-btns { display: flex; gap: 8px; flex-wrap: wrap; }
     .share-btn {
-      padding: 12px 20px; border-radius: 10px;
-      border: none; cursor: pointer;
-      font-family: 'Nunito', sans-serif;
-      font-size: 15px; font-weight: 800;
-      display: flex; align-items: center; gap: 8px;
+      padding: 10px 16px; border-radius: var(--radius-lg);
+      border: 1px solid var(--border-light);
+      background: var(--white); cursor: pointer;
+      font-size: 13px; font-weight: 600;
+      color: var(--text); font-family: 'Inter', sans-serif;
+      display: flex; align-items: center; gap: 6px;
       transition: all 0.15s;
     }
-    .share-email { background: #f3f4f6; color: var(--text); }
-    .share-email:hover { background: var(--border); }
-    .share-whatsapp { background: #25D366; color: var(--white); }
-    .share-whatsapp:hover { background: #1da851; }
-    .share-telegram { background: #0088cc; color: var(--white); }
-    .share-telegram:hover { background: #0077b3; }
-    .share-print { background: var(--text); color: var(--white); }
-    .share-print:hover { background: #374151; }
+    .share-btn:hover { border-color: var(--teal); color: var(--teal-deep); }
+    .share-btn.whatsapp:hover { background: #25D366; border-color: #25D366; color: white; }
+    .share-btn.telegram:hover { background: #0088cc; border-color: #0088cc; color: white; }
+    .share-btn.print { background: var(--teal-dark); color: white; border-color: var(--teal-dark); }
+    .share-btn.print:hover { background: var(--teal-deep); }
 
-    /* ── HOW IT WORKS ── */
-    .how { padding: 48px 20px; border-top: 1px solid var(--border); background: var(--white); }
-    .how-inner { max-width: 620px; margin: 0 auto; }
-    .how h2 {
-      font-family: 'Nunito', sans-serif;
-      font-weight: 900; font-size: 26px;
-      text-align: center; margin-bottom: 32px;
-      color: var(--text);
+    /* ── LOOPHOLES SECTION ── */
+    .loopholes {
+      margin-top: 48px; padding-top: 32px;
+      border-top: 1px solid var(--border-light);
     }
-    .how-steps { display: flex; flex-direction: column; gap: 20px; }
-    .how-step { display: flex; gap: 16px; align-items: flex-start; }
-    .how-step-icon {
-      font-size: 28px; flex-shrink: 0;
-      width: 48px; text-align: center;
+    .loopholes-title {
+      font-family: 'Source Serif 4', serif;
+      font-size: 22px; font-weight: 700;
+      color: var(--teal-dark); margin-bottom: 6px;
     }
-    .how-step-title { font-weight: 700; font-size: 16px; margin-bottom: 4px; }
-    .how-step-desc { font-size: 14px; color: var(--muted); line-height: 1.6; }
+    .loopholes-sub {
+      font-size: 14px; color: var(--muted);
+      margin-bottom: 20px; line-height: 1.6;
+    }
+    .loophole-item {
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius-lg);
+      overflow: hidden; margin-bottom: 10px;
+      background: white;
+    }
+    .loophole-q {
+      padding: 14px 16px; cursor: pointer;
+      display: flex; align-items: flex-start;
+      gap: 12px; user-select: none;
+    }
+    .loophole-q:hover { background: var(--teal-light); }
+    .loophole-flag { font-size: 18px; flex-shrink: 0; margin-top: 1px; }
+    .loophole-qtitle {
+      font-weight: 600; font-size: 14px;
+      color: var(--text); flex: 1; line-height: 1.4;
+    }
+    .loophole-saving {
+      font-size: 11px; font-weight: 700;
+      background: #E8F5E9; color: #2E7D32;
+      padding: 3px 8px; border-radius: 2px;
+      white-space: nowrap; flex-shrink: 0;
+      text-transform: uppercase; letter-spacing: 0.04em;
+    }
+    .loophole-arrow {
+      color: var(--muted); font-size: 16px;
+      transition: transform 0.2s; flex-shrink: 0;
+      margin-top: 2px;
+    }
+    .loophole-item.open .loophole-arrow { transform: rotate(180deg); }
+    .loophole-a {
+      display: none; padding: 0 16px 16px 46px;
+      font-size: 13px; color: var(--muted);
+      line-height: 1.7; border-top: 1px solid var(--border-light);
+      padding-top: 14px;
+    }
+    .loophole-item.open .loophole-a { display: block; }
 
-    /* ── FAQ ── */
-    .faq { padding: 48px 20px; border-top: 1px solid var(--border); }
-    .faq-inner { max-width: 620px; margin: 0 auto; }
-    .faq h2 {
-      font-family: 'Nunito', sans-serif;
-      font-weight: 900; font-size: 26px;
-      text-align: center; margin-bottom: 28px;
+    /* ── DISCLAIMER ── */
+    .disclaimer {
+      background: var(--off);
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius);
+      padding: 16px; margin-top: 32px;
+      font-size: 12px; color: var(--muted);
+      line-height: 1.7;
     }
-    .faq-item {
-      border: 1px solid var(--border);
-      border-radius: 12px; margin-bottom: 10px;
-      background: var(--white); overflow: hidden;
-    }
-    .faq-q {
-      padding: 16px 20px; font-weight: 700;
-      font-size: 15px; cursor: pointer;
-      display: flex; justify-content: space-between;
-      align-items: center; user-select: none;
-    }
-    .faq-q:hover { background: var(--bg); }
-    .faq-arrow { color: var(--muted); transition: transform 0.2s; font-size: 18px; }
-    .faq-item.open .faq-arrow { transform: rotate(180deg); }
-    .faq-a {
-      display: none; padding: 0 20px 16px;
-      font-size: 14px; color: var(--muted); line-height: 1.7;
-    }
-    .faq-item.open .faq-a { display: block; }
-
-    /* ── FOOTER ── */
-    footer {
-      background: var(--text); color: rgba(255,255,255,0.6);
-      padding: 32px 20px; text-align: center;
-    }
-    .footer-logo {
-      font-family: 'Nunito', sans-serif;
-      font-weight: 900; font-size: 18px;
-      color: var(--green2); margin-bottom: 8px;
-    }
-    footer p { font-size: 13px; line-height: 1.7; }
-    footer a { color: rgba(255,255,255,0.5); }
-    footer a:hover { color: var(--white); }
-    .footer-links { display: flex; gap: 20px; justify-content: center; margin-top: 16px; font-size: 13px; }
+    .disclaimer strong { color: var(--text); }
 
     /* ── LOADING ── */
     .loading-overlay {
       display: none; position: fixed;
-      inset: 0; background: rgba(0,0,0,0.5);
+      inset: 0; background: rgba(0,43,38,0.85);
       z-index: 999; align-items: center;
-      justify-content: center; flex-direction: column;
-      gap: 16px;
+      justify-content: center; flex-direction: column; gap: 20px;
     }
     .loading-overlay.show { display: flex; }
-    .spinner-big {
-      width: 56px; height: 56px;
-      border: 5px solid rgba(255,255,255,0.2);
-      border-top-color: var(--green2);
-      border-radius: 50%;
-      animation: spin 0.8s linear infinite;
+    .loading-card {
+      background: white; border-radius: var(--radius-lg);
+      padding: 32px 40px; text-align: center;
+      max-width: 320px; width: 90%;
     }
-    @keyframes spin { to { transform: rotate(360deg); } }
-    .loading-msg {
-      color: var(--white); font-family: 'Nunito', sans-serif;
+    .loading-seal {
+      width: 56px; height: 56px;
+      border: 3px solid var(--teal);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 24px; margin: 0 auto 16px;
+      color: var(--teal);
+      animation: pulse 1.5s ease-in-out infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.08); opacity: 0.8; }
+    }
+    .loading-title {
+      font-family: 'Source Serif 4', serif;
       font-size: 18px; font-weight: 700;
+      color: var(--teal-dark); margin-bottom: 8px;
+    }
+    .loading-msg {
+      font-size: 13px; color: var(--muted);
+      line-height: 1.6;
+    }
+    .loading-steps {
+      margin-top: 16px; text-align: left;
+    }
+    .loading-step {
+      font-size: 12px; color: var(--muted);
+      padding: 4px 0; display: flex;
+      align-items: center; gap: 8px;
+    }
+    .loading-step.done { color: var(--teal); }
+    .loading-step.active { color: var(--text); font-weight: 600; }
+    .step-dot {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: var(--border); flex-shrink: 0;
+    }
+    .loading-step.done .step-dot { background: var(--teal); }
+    .loading-step.active .step-dot {
+      background: var(--teal);
+      animation: blink 0.8s ease-in-out infinite;
+    }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--teal-dark); color: rgba(255,255,255,0.6);
+      padding: 32px 20px; margin-top: 48px;
+    }
+    .footer-inner { max-width: 640px; margin: 0 auto; }
+    .footer-logo {
+      font-family: 'Source Serif 4', serif;
+      font-weight: 700; font-size: 16px;
+      color: white; margin-bottom: 6px;
+    }
+    .footer-logo span { color: var(--gold); }
+    footer p { font-size: 12px; line-height: 1.7; margin-bottom: 12px; }
+    .footer-links {
+      display: flex; gap: 16px; flex-wrap: wrap;
+      font-size: 12px; margin-top: 12px;
+    }
+    .footer-links a { color: rgba(255,255,255,0.5); }
+    .footer-links a:hover { color: white; }
+
+    /* ── PRINT ── */
+    @media print {
+      .gov-banner, nav, .progress-wrap, .card:not(.done),
+      .loopholes, .disclaimer, footer, .share-section,
+      .pay-methods, .loading-overlay { display: none !important; }
+      .result-card { display: block !important; border: none; }
+      body { background: white; }
     }
 
     /* ── RESPONSIVE ── */
     @media (max-width: 480px) {
-      .step-card { padding: 20px; }
+      .card { padding: 20px; }
+      .hero { padding: 36px 20px 32px; }
       .country-grid { grid-template-columns: 1fr 1fr; }
+      .form-row { grid-template-columns: 1fr; }
       .share-btns { flex-direction: column; }
-      .share-btn { justify-content: center; }
     }
   </style>
 </head>
 <body>
 
+  <!-- GOV BANNER -->
+  <div class="gov-banner">
+    <div class="gov-banner-inner">
+      <div class="gov-banner-left">
+        <div class="gov-seal">&#9812;</div>
+        <div class="gov-banner-text">
+          <strong>DIYCryptoTax</strong> &mdash; Independent crypto tax calculation service<br>
+          Calculations comply with HMRC &amp; IRS published guidance
+        </div>
+      </div>
+      <div class="not-hmrc">Not affiliated with<br>HMRC or the IRS</div>
+    </div>
+  </div>
+
   <!-- NAV -->
   <nav>
     <div class="nav-inner">
-      <div class="logo">DIY<span>CryptoTax</span></div>
-      <div class="nav-flag">&#127468;&#127463; &#127482;&#127480;</div>
+      <a href="/" class="logo">DIY<span>CryptoTax</span></a>
+      <div class="nav-right">
+        <strong>&#163;10</strong>&nbsp;flat fee &middot; no subscription
+      </div>
     </div>
   </nav>
 
   <!-- HERO -->
   <div class="hero">
-    <span class="hero-emoji">&#128200;</span>
-    <h1>Your crypto tax<br><span>sorted in minutes.</span></h1>
-    <p class="hero-sub">
-      No accountant needed. Just paste your wallet address, tell us if you're in the UK or USA, and we'll work out exactly what you owe.
-    </p>
-    <div class="hero-badges">
-      <span class="badge badge-green">&#10003; Works for Bitcoin &amp; Ethereum</span>
-      <span class="badge badge-green">&#10003; HMRC &amp; IRS compliant</span>
-      <span class="badge">&#128274; Secure &amp; private</span>
-      <span class="badge">&#163;10 flat fee</span>
+    <div class="hero-inner">
+      <div class="hero-kicker">&#9679; HMRC &amp; IRS Compliant Calculations</div>
+      <h1>Know exactly what you owe.<br><em>Not a penny more.</em></h1>
+      <p class="hero-sub">
+        Most crypto holders overpay tax because they don&rsquo;t know the rules.
+        We do. Get your official-grade crypto tax report in minutes &mdash; plain English, no jargon, no accountant needed.
+      </p>
+      <div class="hero-trust">
+        <span class="trust-pill"><span class="check">&#10003;</span> HMRC Section 104 rules</span>
+        <span class="trust-pill"><span class="check">&#10003;</span> IRS FIFO &amp; HIFO methods</span>
+        <span class="trust-pill"><span class="check">&#10003;</span> Legal loopholes highlighted</span>
+        <span class="trust-pill"><span class="check">&#10003;</span> &#163;10 flat fee &middot; pay once</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- PROGRESS -->
+  <div class="progress-wrap">
+    <div class="progress-header">
+      <div class="progress-label">Your application</div>
+      <div class="progress-step-label" id="stepLabel">Step 1 of 4</div>
+    </div>
+    <div class="progress-track">
+      <div class="progress-fill" id="progressFill"></div>
+    </div>
+    <div class="progress-steps">
+      <div class="ps active" id="ps1">Country</div>
+      <div class="ps" id="ps2">Your details</div>
+      <div class="ps" id="ps3">Your situation</div>
+      <div class="ps" id="ps4">Review &amp; pay</div>
     </div>
   </div>
 
   <!-- MAIN -->
   <div class="main">
-    <div class="card-wrap">
 
-      <!-- STEP 1: WALLET -->
-      <div class="step-card active" id="step1">
-        <div class="step-header">
-          <div class="step-num">1</div>
-          <div>
-            <div class="step-title">Paste your wallet address</div>
-            <div class="step-sub">Bitcoin or Ethereum — both work</div>
+    <!-- STEP 1: COUNTRY -->
+    <div class="card active" id="card1">
+      <div class="card-head">
+        <div class="card-num"><span class="card-num-text">1</span></div>
+        <div>
+          <div class="card-title">Where do you pay tax?</div>
+          <div class="card-sub">We apply the exact rules for your country</div>
+        </div>
+      </div>
+      <div class="country-grid">
+        <div class="country-card" id="country-uk" onclick="selectCountry('uk')">
+          <span class="country-flag">&#127468;&#127463;</span>
+          <div class="country-name">United Kingdom</div>
+          <div class="country-rule">HMRC rules &middot; Section 104 pooling &middot; Apr&ndash;Apr tax year</div>
+          <div class="country-price">&#163;10</div>
+        </div>
+        <div class="country-card" id="country-us" onclick="selectCountry('us')">
+          <span class="country-flag">&#127482;&#127480;</span>
+          <div class="country-name">United States</div>
+          <div class="country-rule">IRS rules &middot; FIFO / HIFO &middot; Jan&ndash;Dec tax year</div>
+          <div class="country-price">$10</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 2: YOUR DETAILS -->
+    <div class="card locked" id="card2">
+      <div class="card-head">
+        <div class="card-num"><span class="card-num-text">2</span></div>
+        <div>
+          <div class="card-title">Your details</div>
+          <div class="card-sub">These appear on your report &mdash; for your records only</div>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label" for="firstName">First name</label>
+          <input type="text" class="form-input" id="firstName" placeholder="e.g. Sarah" autocomplete="given-name">
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="lastName">Last name</label>
+          <input type="text" class="form-input" id="lastName" placeholder="e.g. Johnson" autocomplete="family-name">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="emailAddr">Email address</label>
+        <div class="form-hint">We&rsquo;ll send your completed report here</div>
+        <input type="email" class="form-input" id="emailAddr" placeholder="your@email.com" autocomplete="email">
+      </div>
+
+      <div class="form-group" id="niGroup">
+        <label class="form-label" for="niNumber">
+          National Insurance number <span class="form-optional">(optional)</span>
+        </label>
+        <div class="form-hint">Appears on your report for HMRC reference. Format: AB 12 34 56 C</div>
+        <input type="text" class="form-input" id="niNumber" placeholder="AB 12 34 56 C" style="text-transform:uppercase; font-family:'JetBrains Mono',monospace;" maxlength="13">
+      </div>
+
+      <div class="form-group" id="ssnGroup" style="display:none">
+        <label class="form-label" for="ssnLast">
+          SSN last 4 digits <span class="form-optional">(optional)</span>
+        </label>
+        <div class="form-hint">Appears on your report for IRS reference only. We never store this.</div>
+        <input type="text" class="form-input" id="ssnLast" placeholder="e.g. 1234" maxlength="4" style="font-family:'JetBrains Mono',monospace; width:120px;">
+      </div>
+
+      <button class="btn-continue" onclick="goStep3()">
+        Continue &rarr;
+      </button>
+    </div>
+
+    <!-- STEP 3: YOUR SITUATION -->
+    <div class="card locked" id="card3">
+      <div class="card-head">
+        <div class="card-num"><span class="card-num-text">3</span></div>
+        <div>
+          <div class="card-title">Your crypto situation</div>
+          <div class="card-sub">Tick everything that applies &mdash; we find every saving</div>
+        </div>
+      </div>
+
+      <div class="situation-intro">
+        <strong>This is important.</strong> Ticking the right boxes means our engine applies every legal saving that applies to you. Most people miss 2&ndash;3 of these.
+      </div>
+
+      <div class="tick-group">
+        <div class="tick-group-label">What did you do this tax year?</div>
+        <div class="tick-item" onclick="toggleTick('sold')">
+          <div class="tick-box" id="tick-sold"></div>
+          <div class="tick-content">
+            <div class="tick-title">I sold or swapped crypto <span class="tick-tag tag-required">Required</span></div>
+            <div class="tick-desc">Includes selling for cash, swapping one coin for another, or spending crypto</div>
           </div>
         </div>
-        <input type="text" class="wallet-input" id="walletInput"
+        <div class="tick-item" onclick="toggleTick('staking')">
+          <div class="tick-box" id="tick-staking"></div>
+          <div class="tick-content">
+            <div class="tick-title">I received staking or interest rewards</div>
+            <div class="tick-desc">Crypto earned from staking, lending, or savings accounts</div>
+          </div>
+        </div>
+        <div class="tick-item" onclick="toggleTick('defi')">
+          <div class="tick-box" id="tick-defi"></div>
+          <div class="tick-content">
+            <div class="tick-title">I used DeFi or yield farming</div>
+            <div class="tick-desc">Uniswap, Aave, Compound, liquidity pools etc.</div>
+          </div>
+        </div>
+        <div class="tick-item" onclick="toggleTick('nft')">
+          <div class="tick-box" id="tick-nft"></div>
+          <div class="tick-content">
+            <div class="tick-title">I bought or sold NFTs</div>
+            <div class="tick-desc">Non-fungible tokens &mdash; art, gaming items, collectibles</div>
+          </div>
+        </div>
+        <div class="tick-item" onclick="toggleTick('airdrop')">
+          <div class="tick-box" id="tick-airdrop"></div>
+          <div class="tick-content">
+            <div class="tick-title">I received airdrops or free tokens</div>
+            <div class="tick-desc">Free coins sent to your wallet by a project</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tick-group">
+        <div class="tick-group-label">Potential tax savings &mdash; tick if any apply</div>
+        <div class="tick-item" onclick="toggleTick('rugpull')">
+          <div class="tick-box" id="tick-rugpull"></div>
+          <div class="tick-content">
+            <div class="tick-title">I lost money on coins that went to zero <span class="tick-tag tag-saving">Can save tax</span></div>
+            <div class="tick-desc">Rug pulls, collapsed projects (LUNA etc.) &mdash; you may be able to claim this as a loss</div>
+          </div>
+        </div>
+        <div class="tick-item" onclick="toggleTick('married')" id="tick-married-item">
+          <div class="tick-box" id="tick-married"></div>
+          <div class="tick-content">
+            <div class="tick-title">I am married or have a civil partner <span class="tick-tag tag-saving">Can save tax</span></div>
+            <div class="tick-desc" id="married-desc">You may be able to double your tax-free allowance</div>
+          </div>
+        </div>
+        <div class="tick-item" onclick="toggleTick('losses')">
+          <div class="tick-box" id="tick-losses"></div>
+          <div class="tick-content">
+            <div class="tick-title">I made losses in previous years I never reported <span class="tick-tag tag-saving">Can save tax</span></div>
+            <div class="tick-desc">You have up to 4 years to claim old losses &mdash; they can offset today&rsquo;s gains</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="wallet-section">
+        <div class="wallet-label-row">
+          <label class="form-label" for="walletAddr" style="margin-bottom:0">Your wallet address</label>
+          <span class="wallet-help" onclick="toggleWalletHelp()">Where do I find this?</span>
+        </div>
+        <div class="form-hint" style="margin-top:4px">Bitcoin or Ethereum &mdash; the long code starting with bc1q or 0x</div>
+        <div class="wallet-help-text" id="walletHelpText">
+          Open your crypto app (Coinbase, Binance, Trust Wallet etc.), tap <strong>Receive</strong>, and copy the address shown. It&rsquo;s safe to share &mdash; it&rsquo;s like your bank account number, not your PIN. We <strong>never</strong> ask for your private key or password.
+        </div>
+        <input type="text" class="form-input" id="walletAddr"
           placeholder="e.g. bc1q... or 0x..."
-          autocomplete="off" spellcheck="false">
-        <p class="wallet-hint">
-          This is your public wallet address — the one you share to receive crypto.
-          It starts with <strong>bc1q</strong> for Bitcoin or <strong>0x</strong> for Ethereum.
-          We never ask for your private key or seed phrase.
-          <br><br>
-          &#128161; <strong>Not sure where to find it?</strong>
-          Open your crypto app (Coinbase, Binance, etc), tap Receive, and copy the address shown.
-        </p>
-        <button class="pay-btn pay-card" style="margin-top:20px;font-size:17px;padding:14px;" onclick="goStep2()">
-          That&rsquo;s my address &rarr;
-        </button>
+          autocomplete="off" spellcheck="false"
+          style="font-family:'JetBrains Mono',monospace; margin-top:8px; font-size:14px;">
       </div>
 
-      <!-- STEP 2: COUNTRY -->
-      <div class="step-card locked" id="step2">
-        <div class="step-header">
-          <div class="step-num">2</div>
-          <div>
-            <div class="step-title">Where do you pay tax?</div>
-            <div class="step-sub">Pick your country — we use the right rules for you</div>
-          </div>
-        </div>
-        <div class="country-grid">
-          <button class="country-btn" id="btn-uk" onclick="selectCountry('uk')">
-            <span class="flag">&#127468;&#127463;</span>
-            <div class="country-name">United Kingdom</div>
-            <div class="country-rule">HMRC rules &middot; Tax year Apr&ndash;Apr</div>
-            <div class="country-price">&pound;10</div>
-          </button>
-          <button class="country-btn" id="btn-us" onclick="selectCountry('us')">
-            <span class="flag">&#127482;&#127480;</span>
-            <div class="country-name">United States</div>
-            <div class="country-rule">IRS rules &middot; Tax year Jan&ndash;Dec</div>
-            <div class="country-price">$10</div>
-          </button>
+      <button class="btn-continue" onclick="goStep4()">
+        Review my report &rarr;
+      </button>
+    </div>
+
+    <!-- STEP 4: REVIEW & PAY -->
+    <div class="card locked" id="card4">
+      <div class="card-head">
+        <div class="card-num"><span class="card-num-text">4</span></div>
+        <div>
+          <div class="card-title">Review &amp; pay</div>
+          <div class="card-sub">Check your details, then pay to generate your report</div>
         </div>
       </div>
 
-      <!-- STEP 3: DELIVERY -->
-      <div class="step-card locked" id="step3">
-        <div class="step-header">
-          <div class="step-num">3</div>
-          <div>
-            <div class="step-title">Where shall we send your report?</div>
-            <div class="step-sub">Enter your email &mdash; we&rsquo;ll send it there</div>
-          </div>
-        </div>
-        <input type="email" class="email-input" id="emailInput" placeholder="your@email.com">
-        <div class="delivery-label">Also send to (optional)</div>
-        <div class="delivery-opts">
-          <button class="delivery-opt" id="opt-whatsapp" onclick="toggleOpt('whatsapp')">
-            &#128241; WhatsApp
-          </button>
-          <button class="delivery-opt" id="opt-telegram" onclick="toggleOpt('telegram')">
-            &#9992; Telegram
-          </button>
-          <button class="delivery-opt" id="opt-print" onclick="toggleOpt('print')">
-            &#128438; Save &amp; Print
-          </button>
-        </div>
-        <button class="pay-btn pay-card" style="font-size:17px;padding:14px;" onclick="goStep4()">
-          Continue to payment &rarr;
-        </button>
+      <div class="summary-box" id="summaryBox">
+        <!-- Populated by JS -->
       </div>
 
-      <!-- STEP 4: PAY -->
-      <div class="step-card locked" id="step4">
-        <div class="step-header">
-          <div class="step-num">4</div>
-          <div>
-            <div class="step-title">Pay &amp; get your report</div>
-            <div class="step-sub">One-off payment &mdash; no subscription, no surprises</div>
-          </div>
-        </div>
-        <div class="price-display">
-          <div class="price-big" id="priceDisplay">&pound;10</div>
-          <div class="price-desc">One report &middot; All your transactions &middot; Full tax calculation</div>
-        </div>
-        <button class="pay-btn pay-paypal" onclick="payWithPayPal()">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="#003087"><path d="M7.076 21.337H2.47a.641.641 0 0 1-.633-.74L4.944.901C5.026.382 5.474 0 5.998 0h7.46c2.57 0 4.578.543 5.69 1.81 1.01 1.15 1.304 2.42 1.012 4.287-.023.143-.047.288-.077.437-.983 5.05-4.349 6.797-8.647 6.797h-2.19c-.524 0-.968.382-1.05.9l-1.12 7.106zm14.146-14.42a3.35 3.35 0 0 0-.607-.541c-.013.076-.026.175-.041.254-.93 4.778-4.005 7.201-9.138 7.201h-2.19a.563.563 0 0 0-.556.479l-1.187 7.527h-.506l-.24 1.516a.56.56 0 0 0 .554.647h3.882c.46 0 .85-.334.922-.788.06-.26.76-4.852.816-5.09a.932.932 0 0 1 .923-.788h.58c3.76 0 6.705-1.528 7.565-5.946.36-1.847.174-3.388-.777-4.471z"/></svg>
+      <div class="pay-methods">
+        <button class="pay-btn btn-paypal" onclick="payWithPayPal()">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="#003087"><path d="M7.076 21.337H2.47a.641.641 0 0 1-.633-.74L4.944.901C5.026.382 5.474 0 5.998 0h7.46c2.57 0 4.578.543 5.69 1.81 1.01 1.15 1.304 2.42 1.012 4.287-.023.143-.047.288-.077.437-.983 5.05-4.349 6.797-8.647 6.797h-2.19c-.524 0-.968.382-1.05.9l-1.12 7.106zm14.146-14.42a3.35 3.35 0 0 0-.607-.541c-.013.076-.026.175-.041.254-.93 4.778-4.005 7.201-9.138 7.201h-2.19a.563.563 0 0 0-.556.479l-1.187 7.527h-.506l-.24 1.516a.56.56 0 0 0 .554.647h3.882c.46 0 .85-.334.922-.788.06-.26.76-4.852.816-5.09a.932.932 0 0 1 .923-.788h.58c3.76 0 6.705-1.528 7.565-5.946.36-1.847.174-3.388-.777-4.471z"/></svg>
           Pay with PayPal
         </button>
-        <button class="pay-btn pay-card" onclick="payWithCard()">
-          &#128179; Pay by Card &mdash; <span id="cardPriceBtn">&pound;10</span>
+        <div class="pay-divider">or pay by card</div>
+        <button class="pay-btn btn-card" onclick="payWithCard()">
+          &#128179; Pay by Card &mdash; <span id="cardPriceLabel">&#163;10</span>
         </button>
-        <p class="pay-secure">
-          &#128274; Your payment is secure &middot; We never store card details &middot; Powered by PayPal &amp; Stripe
-        </p>
       </div>
 
-      <!-- RESULT -->
-      <div class="result-card" id="resultCard">
-        <div class="result-icon">&#127881;</div>
-        <div class="result-title">Your tax report is ready!</div>
-        <div class="result-sub">Here&rsquo;s a summary of what we found. Your full report has been sent to your email.</div>
-
-        <div class="result-data" id="resultData">
-          <!-- Populated by JS -->
-        </div>
-
-        <div class="share-btns">
-          <button class="share-btn share-email" onclick="shareEmail()">
-            &#128140; Email again
-          </button>
-          <button class="share-btn share-whatsapp" onclick="shareWhatsApp()">
-            &#128241; WhatsApp
-          </button>
-          <button class="share-btn share-telegram" onclick="shareTelegram()">
-            &#9992; Telegram
-          </button>
-          <button class="share-btn share-print" onclick="window.print()">
-            &#128438; Print / Save PDF
-          </button>
-        </div>
+      <div class="pay-secure">
+        <span class="pay-secure-icon">&#128274;</span>
+        Secure payment &middot; We never store card details &middot; Powered by PayPal &amp; Stripe
       </div>
-
     </div>
-  </div>
 
-  <!-- HOW IT WORKS -->
-  <div class="how">
-    <div class="how-inner">
-      <h2>How it works</h2>
-      <div class="how-steps">
-        <div class="how-step">
-          <div class="how-step-icon">&#128203;</div>
-          <div>
-            <div class="how-step-title">Paste your wallet address</div>
-            <div class="how-step-desc">We look up every crypto transaction you&rsquo;ve ever made using public blockchain data. Nothing private leaves your device &mdash; we just need your public address.</div>
-          </div>
-        </div>
-        <div class="how-step">
-          <div class="how-step-icon">&#129518;</div>
-          <div>
-            <div class="how-step-title">We do all the maths</div>
-            <div class="how-step-desc">For UK users we use HMRC&rsquo;s exact rules (Section 104 pooling). For US users we use IRS rules (FIFO). We look up the price of your crypto on every day you bought or sold, so everything is accurate.</div>
-          </div>
-        </div>
-        <div class="how-step">
-          <div class="how-step-icon">&#128196;</div>
-          <div>
-            <div class="how-step-title">Get your report</div>
-            <div class="how-step-desc">You get a clear, plain-English report showing exactly how much tax you owe (or don&rsquo;t owe!). Send it to your accountant, attach it to your tax return, or just keep it for your records.</div>
-          </div>
-        </div>
-        <div class="how-step">
-          <div class="how-step-icon">&#128176;</div>
-          <div>
-            <div class="how-step-title">Just &pound;10 / $10 flat fee</div>
-            <div class="how-step-desc">No monthly subscription. Pay once, get your report. If you need to run it again next year, just pay again. Simple.</div>
+    <!-- RESULT -->
+    <div class="result-card" id="resultCard">
+      <div class="result-header">
+        <div class="result-doc-type">Crypto Capital Gains &mdash; Tax Calculation Report</div>
+        <div class="result-title" id="resultTitle">UK Tax Year 2024&ndash;25</div>
+        <div class="result-name" id="resultName"></div>
+        <div class="result-ref" id="resultRef"></div>
+      </div>
+      <div class="result-body">
+        <div class="result-verdict" id="resultVerdict"></div>
+        <div class="result-section-title">Your figures</div>
+        <div class="result-table" id="resultTable"></div>
+        <div id="resultTips"></div>
+        <div class="share-section">
+          <div class="share-title">Send or save your report</div>
+          <div class="share-btns">
+            <button class="share-btn" onclick="shareEmail()">&#128140; Email</button>
+            <button class="share-btn whatsapp" onclick="shareWhatsApp()">&#128241; WhatsApp</button>
+            <button class="share-btn telegram" onclick="shareTelegram()">&#9992; Telegram</button>
+            <button class="share-btn print" onclick="window.print()">&#128438; Print / PDF</button>
           </div>
         </div>
       </div>
     </div>
-  </div>
 
-  <!-- FAQ -->
-  <div class="faq">
-    <div class="faq-inner">
-      <h2>Questions people ask</h2>
+    <!-- LOOPHOLES -->
+    <div class="loopholes">
+      <div class="loopholes-title">Legal ways to pay less</div>
+      <div class="loopholes-sub">These are real, HMRC and IRS approved strategies. Most people have never heard of them.</div>
 
-      <div class="faq-item">
-        <div class="faq-q" onclick="toggleFaq(this)">
-          Do I need to be a crypto expert to use this?
-          <span class="faq-arrow">&#8964;</span>
+      <div class="loophole-item" id="lh-washsale" style="display:none">
+        <div class="loophole-q" onclick="toggleLoophole('washsale')">
+          <div class="loophole-flag">&#127482;&#127480;</div>
+          <div class="loophole-qtitle">The wash-sale loophole &mdash; sell at a loss, buy straight back</div>
+          <div class="loophole-saving">Potential saving</div>
+          <div class="loophole-arrow">&#8964;</div>
         </div>
-        <div class="faq-a">Not at all. If you know your wallet address (the long code starting with bc1q or 0x), that&rsquo;s all you need. We do everything else.</div>
+        <div class="loophole-a">The IRS wash-sale rule (which prevents stocks being sold for a tax loss and immediately repurchased) <strong>does not apply to cryptocurrency</strong>. You can sell Bitcoin at a loss at 10am to harvest the tax deduction, then buy it straight back at 10:01am. You keep your position and get the tax saving.</div>
       </div>
 
-      <div class="faq-item">
-        <div class="faq-q" onclick="toggleFaq(this)">
-          Is my information safe?
-          <span class="faq-arrow">&#8964;</span>
+      <div class="loophole-item" id="lh-spouse">
+        <div class="loophole-q" onclick="toggleLoophole('spouse')">
+          <div class="loophole-flag" id="lh-spouse-flag">&#127468;&#127463;</div>
+          <div class="loophole-qtitle" id="lh-spouse-title">Spousal transfer &mdash; double your tax-free allowance</div>
+          <div class="loophole-saving">Up to &#163;6,000 tax-free</div>
+          <div class="loophole-arrow">&#8964;</div>
         </div>
-        <div class="faq-a">Yes. We only use your public wallet address &mdash; the same one you&rsquo;d give to someone to send you crypto. We never ask for your password, private key, or seed phrase. We never store your data after generating your report.</div>
+        <div class="loophole-a" id="lh-spouse-text">In the UK, transfers between spouses or civil partners are free from Capital Gains Tax. If you&rsquo;ve used your &pound;3,000 annual allowance but your spouse hasn&rsquo;t, transfer some crypto to them before selling. You both get the &pound;3,000 allowance &mdash; effectively &pound;6,000 tax-free between you.</div>
       </div>
 
-      <div class="faq-item">
-        <div class="faq-q" onclick="toggleFaq(this)">
-          What if I have multiple wallets?
-          <span class="faq-arrow">&#8964;</span>
+      <div class="loophole-item" id="lh-negligible">
+        <div class="loophole-q" onclick="toggleLoophole('negligible')">
+          <div class="loophole-flag" id="lh-neg-flag">&#127468;&#127463;</div>
+          <div class="loophole-qtitle">Negligible value claim &mdash; dead coins you still hold</div>
+          <div class="loophole-saving">Claim without selling</div>
+          <div class="loophole-arrow">&#8964;</div>
         </div>
-        <div class="faq-a">Run the tool once for each wallet address. Each report is &pound;10/$10. If you have lots of wallets, you might want to talk to an accountant &mdash; our sister site TaxChain Crypto is built for that.</div>
+        <div class="loophole-a" id="lh-neg-text">If a token you hold has gone to zero or been abandoned, you don&rsquo;t need to sell it to claim the loss. Submit a Negligible Value Claim to HMRC. They treat the asset as sold for &pound;0 &mdash; crystallising your capital loss on paper while you keep the token in case it ever recovers.</div>
       </div>
 
-      <div class="faq-item">
-        <div class="faq-q" onclick="toggleFaq(this)">
-          Does this work for Bitcoin and Ethereum?
-          <span class="faq-arrow">&#8964;</span>
+      <div class="loophole-item" id="lh-gasfees">
+        <div class="loophole-q" onclick="toggleLoophole('gasfees')">
+          <div class="loophole-flag">&#9981;</div>
+          <div class="loophole-qtitle">Gas fees reduce your taxable gain &mdash; most people miss this</div>
+          <div class="loophole-saving">Reduces your gain</div>
+          <div class="loophole-arrow">&#8964;</div>
         </div>
-        <div class="faq-a">Yes, both. We also support most ERC-20 tokens on Ethereum (like USDC, LINK, UNI etc). If you have Solana or other chains, we&rsquo;re working on adding those soon.</div>
+        <div class="loophole-a">Every network fee (gas fee) you paid when buying or selling crypto can be added to your cost basis or deducted from your proceeds. If you paid &pound;50 in Ethereum gas fees to make a swap, that &pound;50 directly reduces your taxable profit. Most people never claim these.</div>
       </div>
 
-      <div class="faq-item">
-        <div class="faq-q" onclick="toggleFaq(this)">
-          I only made a small amount &mdash; do I still need to report it?
-          <span class="faq-arrow">&#8964;</span>
+      <div class="loophole-item" id="lh-losses">
+        <div class="loophole-q" onclick="toggleLoophole('losses')">
+          <div class="loophole-flag" id="lh-losses-flag">&#127468;&#127463;</div>
+          <div class="loophole-qtitle">Old losses you never reported can offset today&rsquo;s gains</div>
+          <div class="loophole-saving">Up to 4 years back</div>
+          <div class="loophole-arrow">&#8964;</div>
         </div>
-        <div class="faq-a">In the UK, you only pay tax if your total gains are over &pound;3,000 in a tax year. In the US it depends on your income. But HMRC still wants to know about it even if you don&rsquo;t owe anything &mdash; so it&rsquo;s worth checking. Our report tells you clearly whether you owe anything.</div>
+        <div class="loophole-a" id="lh-losses-text">Did you lose money in the 2022 crypto crash and never declare it? You have up to 4 years to register those losses with HMRC. Once registered, they carry forward indefinitely to offset future gains &mdash; meaning your 2022 losses can reduce your 2025 tax bill.</div>
       </div>
 
-      <div class="faq-item">
-        <div class="faq-q" onclick="toggleFaq(this)">
-          Can I send the report to my accountant?
-          <span class="faq-arrow">&#8964;</span>
+      <div class="loophole-item" id="lh-hifo" style="display:none">
+        <div class="loophole-q" onclick="toggleLoophole('hifo')">
+          <div class="loophole-flag">&#127482;&#127480;</div>
+          <div class="loophole-qtitle">HIFO accounting &mdash; sell your most expensive coins first</div>
+          <div class="loophole-saving">Minimises gains</div>
+          <div class="loophole-arrow">&#8964;</div>
         </div>
-        <div class="faq-a">Absolutely &mdash; that&rsquo;s exactly what most people do. Just forward the email we send you, or print a PDF copy. The report is laid out clearly so any accountant can read it easily.</div>
+        <div class="loophole-a">The IRS allows &ldquo;Specific Identification&rdquo; for crypto. Instead of defaulting to FIFO (first coins in, first out), you can choose HIFO (highest cost first). This means when you sell, the engine picks the coins you paid the most for &mdash; mathematically minimising your capital gain every time.</div>
       </div>
 
     </div>
-  </div>
+
+    <div class="disclaimer">
+      <strong>Important:</strong> DIYCryptoTax is an independent service and is not affiliated with, endorsed by, or connected to HMRC or the Internal Revenue Service (IRS). Our calculations are based on published HMRC and IRS guidance for cryptocurrency taxation. This report is for informational purposes and does not constitute professional tax advice. For complex situations, please consult a qualified tax professional. &copy; 2026 DIYCryptoTax.
+    </div>
+
+  </div><!-- /main -->
 
   <!-- FOOTER -->
   <footer>
-    <div class="footer-logo">DIYCryptoTax</div>
-    <p>Crypto tax made simple for everyday people.<br>
-    UK &amp; USA &middot; &pound;10 / $10 per report &middot; No subscription</p>
-    <div class="footer-links">
-      <a href="mailto:support@diycryptotax.com">Contact</a>
-      <a href="#">Privacy</a>
-      <a href="#">Terms</a>
-      <a href="https://taxchaincrypto.com" target="_blank">For accountants &rarr;</a>
+    <div class="footer-inner">
+      <div class="footer-logo">DIY<span>CryptoTax</span></div>
+      <p>Independent crypto tax calculations for UK &amp; US individuals.<br>
+      HMRC Section 104 &middot; IRS FIFO/HIFO &middot; &#163;10 / $10 per report &middot; No subscription</p>
+      <div class="footer-links">
+        <a href="mailto:support@diycryptotax.com">Contact</a>
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Use</a>
+        <a href="https://taxchaincrypto.com" target="_blank">For accountants &rarr;</a>
+      </div>
+      <p style="margin-top:12px; font-size:11px; opacity:0.4;">Not affiliated with HMRC or the IRS &middot; Powered by TaxChain Crypto engine</p>
     </div>
-    <p style="margin-top:16px; font-size:11px; opacity:0.5;">&copy; 2026 DIYCryptoTax. Powered by TaxChain Crypto engine. HMRC &amp; IRS compliant calculations.</p>
   </footer>
 
-  <!-- LOADING OVERLAY -->
+  <!-- LOADING -->
   <div class="loading-overlay" id="loadingOverlay">
-    <div class="spinner-big"></div>
-    <div class="loading-msg" id="loadingMsg">Looking up your transactions&hellip;</div>
+    <div class="loading-card">
+      <div class="loading-seal">&#9812;</div>
+      <div class="loading-title">Calculating your tax&hellip;</div>
+      <div class="loading-msg">Please wait while we analyse your wallet</div>
+      <div class="loading-steps" id="loadingSteps">
+        <div class="loading-step done" id="ls1"><div class="step-dot"></div> Connecting to blockchain</div>
+        <div class="loading-step active" id="ls2"><div class="step-dot"></div> Fetching transaction history</div>
+        <div class="loading-step" id="ls3"><div class="step-dot"></div> Applying tax rules</div>
+        <div class="loading-step" id="ls4"><div class="step-dot"></div> Finding your savings</div>
+        <div class="loading-step" id="ls5"><div class="step-dot"></div> Generating your report</div>
+      </div>
+    </div>
   </div>
 
   <script>
-    // State
-    let selectedCountry = null;
-    let walletAddress = '';
-    let userEmail = '';
-    let deliveryOpts = new Set();
-    let reportData = null;
+    // ── STATE ──
+    const state = {
+      country: null,
+      firstName: '', lastName: '', email: '', niNumber: '', ssn: '',
+      wallet: '',
+      ticks: new Set(),
+      reportData: null
+    };
 
-    // ── STEP NAVIGATION ──
-    function setStep(stepId, state) {
-      const el = document.getElementById(stepId);
-      el.classList.remove('active', 'done', 'locked');
-      el.classList.add(state);
-    }
+    let currentStep = 1;
 
-    function goStep2() {
-      walletAddress = document.getElementById('walletInput').value.trim();
-      if (!walletAddress || walletAddress.length < 10) {
-        alert('Please paste your wallet address first.');
-        return;
+    // ── PROGRESS ──
+    function updateProgress(step) {
+      currentStep = step;
+      const pct = ((step - 1) / 3) * 100;
+      document.getElementById('progressFill').style.width = pct + '%';
+      document.getElementById('stepLabel').textContent = 'Step ' + step + ' of 4';
+      for (let i = 1; i <= 4; i++) {
+        const el = document.getElementById('ps' + i);
+        el.className = 'ps' + (i < step ? ' done' : i === step ? ' active' : '');
       }
-      setStep('step1', 'done');
-      setStep('step2', 'active');
-      document.getElementById('step2').scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
 
+    function setCard(id, state) {
+      const el = document.getElementById('card' + id);
+      el.className = 'card ' + state;
+    }
+
+    // ── STEP 1: COUNTRY ──
     function selectCountry(c) {
-      selectedCountry = c;
-      document.getElementById('btn-uk').classList.toggle('selected', c === 'uk');
-      document.getElementById('btn-us').classList.toggle('selected', c === 'us');
-      const price = c === 'uk' ? '&pound;10' : '$10';
-      document.getElementById('priceDisplay').innerHTML = price;
-      document.getElementById('cardPriceBtn').innerHTML = price;
+      state.country = c;
+      document.getElementById('country-uk').classList.toggle('selected', c === 'uk');
+      document.getElementById('country-us').classList.toggle('selected', c === 'us');
+
+      // Show/hide NI vs SSN
+      document.getElementById('niGroup').style.display = c === 'uk' ? '' : 'none';
+      document.getElementById('ssnGroup').style.display = c === 'us' ? '' : 'none';
+
+      // Update US/UK loopholes
+      const isUK = c === 'uk';
+      document.getElementById('lh-washsale').style.display = isUK ? 'none' : '';
+      document.getElementById('lh-hifo').style.display = isUK ? 'none' : '';
+      document.getElementById('lh-spouse-flag').textContent = isUK ? '\uD83C\uDDEC\uD83C\uDDE7' : '\uD83C\uDDFA\uD83C\uDDF8';
+      document.getElementById('lh-neg-flag').textContent = isUK ? '\uD83C\uDDEC\uD83C\uDDE7' : '\uD83C\uDDFA\uD83C\uDDF8';
+      document.getElementById('lh-losses-flag').textContent = isUK ? '\uD83C\uDDEC\uD83C\uDDE7' : '\uD83C\uDDFA\uD83C\uDDF8';
+
+      if (!isUK) {
+        document.getElementById('lh-spouse-title').textContent = 'Spousal transfer \u2014 double your tax-free allowance';
+        document.getElementById('lh-spouse-text').textContent = 'In the US, transfers between spouses are also treated favourably. Consult a CPA for specifics on your state.';
+        document.getElementById('lh-neg-text').textContent = 'Dead coins (rug pulls, collapsed projects) can be crystallised as losses by selling for $1 in an off-market transaction, sending to a burn address, or using a specialised platform. This locks in the deductible loss.';
+        document.getElementById('lh-losses-text').textContent = 'Capital losses carry forward indefinitely in the US. Any losses beyond the $3,000 annual income offset roll forward to future years. Losses from the 2022 crash are still usable today.';
+        document.getElementById('married-desc').textContent = 'Spousal transfers may offer tax advantages \u2014 consult a CPA';
+      }
+
+      // Update card price label
+      document.getElementById('cardPriceLabel').innerHTML = c === 'uk' ? '&pound;10' : '$10';
+
       setTimeout(() => {
-        setStep('step2', 'done');
-        setStep('step3', 'active');
-        document.getElementById('step3').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        setCard(1, 'done');
+        setCard(2, 'active');
+        updateProgress(2);
+        document.getElementById('card2').scrollIntoView({ behavior: 'smooth', block: 'start' });
       }, 300);
     }
 
-    function toggleOpt(opt) {
-      const btn = document.getElementById('opt-' + opt);
-      if (deliveryOpts.has(opt)) {
-        deliveryOpts.delete(opt);
-        btn.classList.remove('selected');
+    // ── STEP 2: DETAILS ──
+    function goStep3() {
+      const first = document.getElementById('firstName').value.trim();
+      const last = document.getElementById('lastName').value.trim();
+      const email = document.getElementById('emailAddr').value.trim();
+
+      if (!first || !last) { alert('Please enter your first and last name.'); return; }
+      if (!email || !email.includes('@')) { alert('Please enter a valid email address.'); return; }
+
+      state.firstName = first;
+      state.lastName = last;
+      state.email = email;
+      state.niNumber = document.getElementById('niNumber').value.trim();
+      state.ssn = document.getElementById('ssnLast').value.trim();
+
+      setCard(2, 'done');
+      setCard(3, 'active');
+      updateProgress(3);
+      document.getElementById('card3').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    // ── STEP 3: SITUATION ──
+    function toggleTick(id) {
+      const box = document.getElementById('tick-' + id);
+      if (state.ticks.has(id)) {
+        state.ticks.delete(id);
+        box.classList.remove('checked');
       } else {
-        deliveryOpts.add(opt);
-        btn.classList.add('selected');
+        state.ticks.add(id);
+        box.classList.add('checked');
       }
+    }
+
+    function toggleWalletHelp() {
+      document.getElementById('walletHelpText').classList.toggle('show');
     }
 
     function goStep4() {
-      userEmail = document.getElementById('emailInput').value.trim();
-      if (!userEmail || !userEmail.includes('@')) {
-        alert('Please enter your email address so we can send your report.');
+      const wallet = document.getElementById('walletAddr').value.trim();
+      if (!wallet || wallet.length < 10) {
+        alert('Please enter your wallet address.');
         return;
       }
-      setStep('step3', 'done');
-      setStep('step4', 'active');
-      document.getElementById('step4').scrollIntoView({ behavior: 'smooth', block: 'start' });
+      state.wallet = wallet;
+
+      // Build summary
+      const isUK = state.country === 'uk';
+      const price = isUK ? '&pound;10' : '$10';
+      const ticks = [...state.ticks];
+      const tickLabels = {
+        sold: 'Sold / swapped crypto',
+        staking: 'Staking / interest rewards',
+        defi: 'DeFi / yield farming',
+        nft: 'NFTs',
+        airdrop: 'Airdrops',
+        rugpull: 'Lost coins (rug pulls)',
+        married: 'Married / civil partner',
+        losses: 'Previous year losses'
+      };
+
+      document.getElementById('summaryBox').innerHTML = `
+        <div class="summary-title">Your report summary</div>
+        <div class="summary-row"><span class="summary-row-label">Name</span><span class="summary-row-val">${state.firstName} ${state.lastName}</span></div>
+        <div class="summary-row"><span class="summary-row-label">Country</span><span class="summary-row-val">${isUK ? '&#127468;&#127463; United Kingdom' : '&#127482;&#127480; United States'}</span></div>
+        <div class="summary-row"><span class="summary-row-label">Tax year</span><span class="summary-row-val">${isUK ? 'April 2024 &ndash; April 2025' : 'January &ndash; December 2024'}</span></div>
+        <div class="summary-row"><span class="summary-row-label">Wallet</span><span class="summary-row-val" style="font-family:'JetBrains Mono',monospace;font-size:12px;">${state.wallet.substring(0,12)}&hellip;</span></div>
+        <div class="summary-row"><span class="summary-row-label">Applies to you</span><span class="summary-row-val">${ticks.map(t => tickLabels[t]).join(', ') || 'None selected'}</span></div>
+        <div class="summary-total">
+          <span class="summary-total-label">Total to pay</span>
+          <span class="summary-total-price">${price}</span>
+        </div>
+      `;
+
+      setCard(3, 'done');
+      setCard(4, 'active');
+      updateProgress(4);
+      document.getElementById('card4').scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
 
     // ── PAYMENT ──
-    function payWithPayPal() { const link = selectedCountry === 'uk' ? 'https://paypal.me/martyndix1/10GBP' : 'https://paypal.me/martyndix1/10USD'; window.open(link, '_blank'); setTimeout(runReport, 3000); }
-
-    function payWithCard() {
-      // Stripe payment link
-      const link = selectedCountry === 'uk'
-        ? 'https://buy.stripe.com/4gM3codJ2eJH0D4c1VbbG03'
-        : 'https://buy.stripe.com/4gM3codJ2eJH0D4c1VbbG03';
+    function payWithPayPal() {
+      const link = state.country === 'uk'
+        ? 'https://paypal.me/martyndix1/10GBP'
+        : 'https://paypal.me/martyndix1/10USD';
       window.open(link, '_blank');
-      // After payment, run the report
       setTimeout(runReport, 2000);
     }
 
-    // ── FETCH REPORT ──
+    function payWithCard() {
+      const link = state.country === 'uk'
+        ? 'https://buy.stripe.com/4gM3codJ2eJH0D4c1VbbG03'
+        : 'https://buy.stripe.com/9B65kw7kEfNLfxY0jdbbG04';
+      window.open(link, '_blank');
+      setTimeout(runReport, 2000);
+    }
+
+    // ── REPORT ──
     async function runReport() {
-      showLoading('Looking up your transactions&hellip;');
+      showLoading();
+
+      const steps = ['ls1','ls2','ls3','ls4','ls5'];
+      let si = 0;
+      const stepTimer = setInterval(() => {
+        if (si > 0) {
+          document.getElementById(steps[si-1]).className = 'loading-step done';
+        }
+        if (si < steps.length) {
+          document.getElementById(steps[si]).className = 'loading-step active';
+          si++;
+        } else {
+          clearInterval(stepTimer);
+        }
+      }, 800);
 
       try {
-        showLoading('Calculating your tax&hellip;');
-
         const res = await fetch(
-          `https://taxchain-api.onrender.com/v1/tax/preview/${walletAddress}?jurisdiction=${selectedCountry}`
+          `https://taxchain-api.onrender.com/v1/tax/preview/${state.wallet}?jurisdiction=${state.country}`
         );
-
-        if (!res.ok) throw new Error('Could not fetch your report. Please try again.');
-        reportData = await res.json();
-
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+        state.reportData = await res.json();
+        clearInterval(stepTimer);
         hideLoading();
-        showResult(reportData);
-
-      } catch (e) {
+        showResult(state.reportData);
+      } catch(e) {
+        clearInterval(stepTimer);
         hideLoading();
-        alert('Something went wrong: ' + e.message + '\n\nPlease try again in a moment.');
+        alert('Could not fetch your report: ' + e.message + '\n\nIf this is your first request, the server may be waking up. Please try again in 30 seconds.');
       }
     }
 
     function showResult(data) {
-      // Hide all steps
-      ['step1','step2','step3','step4'].forEach(s => {
-        document.getElementById(s).style.display = 'none';
+      ['card1','card2','card3','card4'].forEach(id => {
+        document.getElementById(id).style.display = 'none';
       });
 
-      const isUK = selectedCountry === 'uk';
-      const currency = isUK ? '&pound;' : '$';
+      const isUK = state.country === 'uk';
+      const sym = isUK ? '&pound;' : '$';
       const gain = data.gain_if_sold_usd || data.net_gain_gbp || 0;
       const tax = data.estimated_tax_usd || 0;
       const price = data.current_price_usd || 0;
       const holdings = data.holdings_btc || 0;
+      const allowance = isUK ? 3000 : 0;
+      const netGainAfterAllowance = Math.max(0, gain - allowance);
+      const refNum = 'DCT-' + Date.now().toString(36).toUpperCase();
 
-      document.getElementById('resultData').innerHTML = `
-        <div class="result-row">
-          <span class="result-row-label">Current holding value</span>
-          <span class="result-row-val">${currency}${(holdings * price).toFixed(2)}</span>
-        </div>
-        <div class="result-row">
-          <span class="result-row-label">Total gain / loss</span>
-          <span class="result-row-val ${gain >= 0 ? 'warn' : 'good'}">${currency}${Math.abs(gain).toFixed(2)} ${gain >= 0 ? 'gain' : 'loss'}</span>
-        </div>
-        <div class="result-row">
-          <span class="result-row-label">Estimated tax owed</span>
-          <span class="result-row-val ${tax > 0 ? 'warn' : 'good'}">${tax > 0 ? currency + tax.toFixed(2) : 'Nothing &mdash; you&rsquo;re within the free allowance!'}</span>
-        </div>
-        <div class="result-row">
-          <span class="result-row-label">Tax year</span>
-          <span class="result-row-val">${isUK ? 'April 2024 &mdash; April 2025' : 'Jan &mdash; Dec 2024'}</span>
-        </div>
-        <div class="result-row">
-          <span class="result-row-label">Method used</span>
-          <span class="result-row-val">${isUK ? 'HMRC Section 104' : 'IRS FIFO'}</span>
-        </div>
+      // Title
+      document.getElementById('resultTitle').textContent = isUK
+        ? 'UK Tax Year 2024\u201325 \u2014 Capital Gains Report'
+        : 'US Tax Year 2024 \u2014 Capital Gains Report';
+      document.getElementById('resultName').textContent = state.firstName + ' ' + state.lastName;
+      document.getElementById('resultRef').textContent = 'Reference: ' + refNum + (state.niNumber ? ' \u00B7 NI: ' + state.niNumber : '');
+
+      // Verdict
+      const verdictEl = document.getElementById('resultVerdict');
+      if (tax <= 0) {
+        verdictEl.className = 'result-verdict verdict-good';
+        verdictEl.innerHTML = `<div class="verdict-icon">&#127881;</div>
+          <div class="verdict-headline">Good news &mdash; you likely owe nothing.</div>
+          <div class="verdict-sub">Your gains are within the tax-free allowance. Keep this report for your records.</div>`;
+      } else {
+        verdictEl.className = 'result-verdict verdict-warn';
+        verdictEl.innerHTML = `<div class="verdict-icon">&#9888;</div>
+          <div class="verdict-headline">You have a tax liability to declare.</div>
+          <div class="verdict-sub">See the figures below. Check the legal savings section &mdash; you may be able to reduce this.</div>`;
+      }
+
+      // Table
+      document.getElementById('resultTable').innerHTML = `
+        <div class="result-row"><span class="rr-label">Current holding value</span><span class="rr-val neutral">${sym}${(holdings * price).toLocaleString('en-GB', {minimumFractionDigits:2, maximumFractionDigits:2})}</span></div>
+        <div class="result-row"><span class="rr-label">Total capital gain</span><span class="rr-val ${gain > 0 ? 'positive' : 'negative'}">${sym}${Math.abs(gain).toLocaleString('en-GB', {minimumFractionDigits:2, maximumFractionDigits:2})} ${gain >= 0 ? 'gain' : 'loss'}</span></div>
+        ${isUK ? `<div class="result-row"><span class="rr-label">Annual exempt amount (${sym}3,000)</span><span class="rr-val negative">&minus;${sym}${Math.min(gain, allowance).toLocaleString('en-GB', {minimumFractionDigits:2, maximumFractionDigits:2})}</span></div>` : ''}
+        <div class="result-row"><span class="rr-label">Taxable gain after allowance</span><span class="rr-val ${netGainAfterAllowance > 0 ? 'positive' : 'negative'}">${sym}${netGainAfterAllowance.toLocaleString('en-GB', {minimumFractionDigits:2, maximumFractionDigits:2})}</span></div>
+        <div class="result-row"><span class="rr-label">Estimated tax owed</span><span class="rr-val ${tax > 0 ? 'positive' : 'negative'}">${tax > 0 ? sym + tax.toLocaleString('en-GB', {minimumFractionDigits:2, maximumFractionDigits:2}) : 'Nothing \u2014 within allowance'}</span></div>
+        <div class="result-row"><span class="rr-label">Tax method applied</span><span class="rr-val neutral">${isUK ? 'HMRC Section 104' : 'IRS FIFO'}</span></div>
+        <div class="result-row"><span class="rr-label">Tax year</span><span class="rr-val neutral">${isUK ? 'Apr 2024 \u2013 Apr 2025' : 'Jan \u2013 Dec 2024'}</span></div>
       `;
+
+      // Tips based on ticks
+      let tips = '';
+      if (state.ticks.has('married') && isUK) {
+        tips += `<div class="tip-box"><div class="tip-title">&#128161; Spousal transfer could save you tax</div><div class="tip-text">You&rsquo;re married or have a civil partner. Transferring crypto to them before selling could double your tax-free allowance to &pound;6,000. Speak to a tax adviser about how to do this correctly.</div></div>`;
+      }
+      if (state.ticks.has('rugpull')) {
+        tips += `<div class="tip-box"><div class="tip-title">&#128161; You may be able to claim your rug pull losses</div><div class="tip-text">${isUK ? 'File a Negligible Value Claim with HMRC for any tokens that have gone to zero. This locks in a capital loss without needing to sell.' : 'Sell dead tokens for $1 or send to a burn address to crystallise the loss and make it tax-deductible.'}</div></div>`;
+      }
+      if (state.ticks.has('losses')) {
+        tips += `<div class="tip-box"><div class="tip-title">&#128161; Your old losses could reduce today&rsquo;s bill</div><div class="tip-text">${isUK ? 'You have up to 4 years to register previous year losses with HMRC. Once registered, they carry forward indefinitely against future gains.' : 'Your carry-forward losses can offset this year&rsquo;s gains. Make sure you reported them on your previous tax returns.'}</div></div>`;
+      }
+      document.getElementById('resultTips').innerHTML = tips;
 
       document.getElementById('resultCard').classList.add('show');
       document.getElementById('resultCard').scrollIntoView({ behavior: 'smooth' });
+      updateProgress(4);
     }
 
     // ── SHARE ──
     function shareEmail() {
-      window.location.href = `mailto:${userEmail}?subject=Your Crypto Tax Report&body=Your crypto tax report is attached. Generated by DIYCryptoTax.com`;
+      const sub = encodeURIComponent('My Crypto Tax Report \u2014 DIYCryptoTax');
+      const body = encodeURIComponent(`Hi,\n\nPlease find my crypto tax report attached.\n\nGenerated by DIYCryptoTax.com\nReference: DCT-${Date.now().toString(36).toUpperCase()}\n\nName: ${state.firstName} ${state.lastName}`);
+      window.location.href = `mailto:${state.email}?subject=${sub}&body=${body}`;
     }
-
     function shareWhatsApp() {
-      const msg = encodeURIComponent('Here is my crypto tax report from DIYCryptoTax.com');
-      window.open('https://wa.me/?text=' + msg, '_blank');
+      window.open('https://wa.me/?text=' + encodeURIComponent('My crypto tax report from DIYCryptoTax.com \u2014 ' + state.firstName + ' ' + state.lastName), '_blank');
+    }
+    function shareTelegram() {
+      window.open('https://t.me/share/url?url=https://diycryptotax.com&text=' + encodeURIComponent('My crypto tax report'), '_blank');
     }
 
-    function shareTelegram() {
-      const msg = encodeURIComponent('Here is my crypto tax report from DIYCryptoTax.com');
-      window.open('https://t.me/share/url?url=https://diycryptotax.com&text=' + msg, '_blank');
+    // ── LOOPHOLES ──
+    function toggleLoophole(id) {
+      document.getElementById('lh-' + id).classList.toggle('open');
     }
 
     // ── LOADING ──
-    function showLoading(msg) {
-      document.getElementById('loadingMsg').innerHTML = msg;
+    function showLoading() {
       document.getElementById('loadingOverlay').classList.add('show');
     }
     function hideLoading() {
       document.getElementById('loadingOverlay').classList.remove('show');
     }
 
-    // ── FAQ ──
-    function toggleFaq(el) {
-      el.parentElement.classList.toggle('open');
-    }
+    // ── INIT ──
+    updateProgress(1);
   </script>
 
 </body>
