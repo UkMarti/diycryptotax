@@ -712,13 +712,7 @@
     }
 
     // ── PAYMENT ──
-    function payWithPayPal() {
-      // PayPal payment link - replace with real PayPal payment URL
-      const amount = selectedCountry === 'uk' ? '10.00' : '10.00';
-      const currency = selectedCountry === 'uk' ? 'GBP' : 'USD';
-      // For now simulate - replace with real PayPal.me or PayPal button
-      runReport();
-    }
+    function payWithPayPal() { const link = selectedCountry === 'uk' ? 'https://paypal.me/martyndix1/10GBP' : 'https://paypal.me/martyndix1/10USD'; window.open(link, '_blank'); setTimeout(runReport, 3000); }
 
     function payWithCard() {
       // Stripe payment link
